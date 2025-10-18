@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bug Bounty Commands Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent-light: #dbeafe;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        .dark-mode {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --accent: #60a5fa;
+            --accent-light: #1e3a8a;
+            --border: #334155;
+            --border-light: #1e293b;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+            --success: #34d399;
+            --warning: #fbbf24;
+            --danger: #f87171;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 24px 0;
+            border-bottom: 1px solid var(--border);
+            background-color: var(--bg-primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.025em;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .search-container {
+            position: relative;
+            width: 360px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 15px;
+            font-weight: 400;
+            transition: all 0.3s;
+        }
+
+        .search-container input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 16px;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+            padding: 30px 0;
+        }
+
+        .sidebar {
+            background-color: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 24px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar h2 i {
+            color: var(--accent);
+        }
+
+        .category-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .category-item {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .category-item:hover {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .category-item.active {
+            background-color: var(--accent-light);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .category-count {
+            background-color: var(--bg-primary);
+            color: var(--text-muted);
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .category-item.active .category-count {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .stat-card {
+            background-color: var(--bg-card);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-light);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 20px;
+        }
+
+        .stat-card:nth-child(1) .stat-icon {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--accent);
+        }
+
+        .stat-card:nth-child(2) .stat-icon {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .stat-card:nth-child(3) .stat-icon {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-card p {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .commands-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid var(--border);
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .btn:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+
+        .commands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .command-card {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-light);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+        }
+
+        .command-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .command-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .command-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .category-tag {
+            background-color: var(--accent-light);
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .command-code {
+            background-color: var(--bg-tertiary);
+            padding: 16px;
+            border-radius: 12px;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', monospace;
+            font-size: 14px;
+            color: var(--text-primary);
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.5;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .copy-btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background-color 0.2s;
+            align-self: flex-start;
+        }
+
+        .copy-btn:hover {
+            background-color: #2563eb;
+        }
+
+        .copy-btn.copied {
+            background-color: var(--success);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+            grid-column: 1 / -1;
+        }
+
+        .no-results i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        .no-results h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .no-results p {
+            font-size: 16px;
+            color: var(--text-muted);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+            grid-column: 1 / -1;
+        }
+
+        .loading i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: var(--accent);
+        }
+
+        .loading h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .commands-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-container {
+                width: 100%;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .controls {
+                width: 100%;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>One-liner commands for bug bounty</h1>
+                        <p>Essential commands for security researchers</p>
+                    </div>
+                </div>
+                <div class="controls">
+                    <div class="search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search commands by title or content...">
+                    </div>
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <aside class="sidebar">
+                <h2><i class="fas fa-filter"></i> Filter by Category</h2>
+                <ul class="category-list" id="categoryList">
+                    <!-- Categories will be populated by JavaScript -->
+                </ul>
+            </aside>
+
+            <main class="content-area">
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-terminal"></i>
+                        </div>
+                        <h3>Total Commands</h3>
+                        <p id="totalCommands">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <h3>Categories</h3>
+                        <p id="totalCategories">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>Search Results</h3>
+                        <p id="searchResults">0</p>
+                    </div>
+                </div>
+
+                <section class="commands-section">
+                    <div class="section-header">
+                        <h2 id="sectionTitle">All Commands</h2>
+                        <div class="section-actions">
+                            <button class="btn" id="expandAll">
+                                <i class="fas fa-expand-alt"></i> Expand All
+                            </button>
+                            <button class="btn btn-primary" id="collapseAll">
+                                <i class="fas fa-compress-alt"></i> Collapse All
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="commands-grid" id="commandsGrid">
+                        <div class="loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <h3>Loading Commands...</h3>
+                            <p>Fetching data from commands.json</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        let commandsData = [];
+        let currentCategory = 'all';
+        let currentSearch = '';
+
+        // Get DOM elements
+        const searchInput = document.getElementById('searchInput');
+        const themeToggle = document.getElementById('themeToggle');
+        const commandsGrid = document.getElementById('commandsGrid');
+        const categoryList = document.getElementById('categoryList');
+        const totalCommands = document.getElementById('totalCommands');
+        const totalCategories = document.getElementById('totalCategories');
+        const searchResults = document.getElementById('searchResults');
+        const sectionTitle = document.getElementById('sectionTitle');
+        const expandAllBtn = document.getElementById('expandAll');
+        const collapseAllBtn = document.getElementById('collapseAll');
+
+        // Theme toggle functionality
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const icon = themeToggle.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+
+        // Function to extract category from title
+        function extractCategory(title) {
+            if (title.includes('Subdomain') || title.includes('Takeover')) {
+                return 'Subdomain';
+            } else if (title.includes('XSS') || title.includes('Cross-site')) {
+                return 'XSS';
+            } else if (title.includes('SQL') || title.includes('Injection')) {
+                return 'SQL Injection';
+            } else if (title.includes('Directory') || title.includes('Bruteforce')) {
+                return 'Directory Scanning';
+            } else if (title.includes('CORS') || title.includes('Misconfig')) {
+                return 'Misconfigurations';
+            } else if (title.includes('CVE') || title.includes('Vulnerabilities')) {
+                return 'Vulnerabilities';
+            } else if (title.includes('Secrets') || title.includes('API Key')) {
+                return 'Secrets';
+            } else if (title.includes('Backup') || title.includes('Config')) {
+                return 'Sensitive Files';
+            } else if (title.includes('Recon') || title.includes('Discovery')) {
+                return 'Reconnaissance';
+            } else if (title.includes('Redirect')) {
+                return 'Open Redirect';
+            } else if (title.includes('LFI') || title.includes('File Inclusion')) {
+                return 'LFI';
+            } else if (title.includes('SSRF')) {
+                return 'SSRF';
+            } else if (title.includes('CRLF')) {
+                return 'CRLF';
+            } else if (title.includes('SSTI')) {
+                return 'SSTI';
+            } else if (title.includes('GraphQL')) {
+                return 'GraphQL';
+            } else if (title.includes('JWT') || title.includes('Token')) {
+                return 'Authentication';
+            } else if (title.includes('WordPress') || title.includes('CMS')) {
+                return 'CMS';
+            } else if (title.includes('AWS') || title.includes('S3') || title.includes('Bucket')) {
+                return 'Cloud';
+            } else {
+                return 'General';
+            }
+        }
+
+        // Function to get all categories with counts
+        function getCategoriesWithCounts(commands) {
+            const categories = {};
+            commands.forEach(command => {
+                const category = extractCategory(command.title);
+                categories[category] = (categories[category] || 0) + 1;
+            });
+            return categories;
+        }
+
+        // Function to render category list
+        function renderCategoryList(commands) {
+            const categories = getCategoriesWithCounts(commands);
+            categoryList.innerHTML = '';
+            
+            // Add "All" category
+            const allItem = document.createElement('li');
+            allItem.className = `category-item ${currentCategory === 'all' ? 'active' : ''}`;
+            allItem.innerHTML = `
+                <span>All Categories</span>
+                <span class="category-count">${commands.length}</span>
+            `;
+            allItem.addEventListener('click', () => {
+                currentCategory = 'all';
+                filterCommands();
+                renderCategoryList(commandsData);
+            });
+            categoryList.appendChild(allItem);
+            
+            // Add each category
+            Object.keys(categories).sort().forEach(category => {
+                const item = document.createElement('li');
+                item.className = `category-item ${currentCategory === category ? 'active' : ''}`;
+                item.innerHTML = `
+                    <span>${category}</span>
+                    <span class="category-count">${categories[category]}</span>
+                `;
+                item.addEventListener('click', () => {
+                    currentCategory = category;
+                    filterCommands();
+                    renderCategoryList(commandsData);
+                });
+                categoryList.appendChild(item);
+            });
+        }
+
+        // Function to render command cards
+        function renderCommands(commands) {
+            commandsGrid.innerHTML = '';
+            
+            if (commands.length === 0) {
+                commandsGrid.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <h3>No commands found</h3>
+                        <p>Try adjusting your search terms or category filter</p>
+                    </div>
+                `;
+                searchResults.textContent = '0';
+                return;
+            }
+            
+            searchResults.textContent = commands.length;
+            
+            commands.forEach(command => {
+                const category = extractCategory(command.title);
+                const card = document.createElement('div');
+                card.className = 'command-card fade-in';
+                card.innerHTML = `
+                    <div class="command-header">
+                        <div class="command-title">${command.title}</div>
+                        <div class="category-tag">${category}</div>
+                    </div>
+                    <div class="command-code">${command.command}</div>
+                    <button class="copy-btn" data-command="${command.command.replace(/"/g, '&quot;')}">
+                        <i class="far fa-copy"></i> Copy Command
+                    </button>
+                `;
+                commandsGrid.appendChild(card);
+            });
+            
+            // Add copy functionality
+            document.querySelectorAll('.copy-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const command = button.getAttribute('data-command');
+                    navigator.clipboard.writeText(command).then(() => {
+                        const originalText = button.innerHTML;
+                        button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                        button.classList.add('copied');
+                        
+                        setTimeout(() => {
+                            button.innerHTML = originalText;
+                            button.classList.remove('copied');
+                        }, 2000);
+                    });
+                });
+            });
+        }
+
+        // Function to filter commands based on search input and category
+        function filterCommands() {
+            const searchTerm = searchInput.value.toLowerCase();
+            currentSearch = searchTerm;
+            
+            let filteredCommands = commandsData;
+            
+            // Apply search filter
+            if (searchTerm) {
+                filteredCommands = filteredCommands.filter(command => 
+                    command.title.toLowerCase().includes(searchTerm) || 
+                    command.command.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Apply category filter
+            if (currentCategory !== 'all') {
+                filteredCommands = filteredCommands.filter(command => 
+                    extractCategory(command.title) === currentCategory
+                );
+            }
+            
+            // Update section title
+            if (currentCategory === 'all') {
+                sectionTitle.textContent = searchTerm ? `Search Results for "${searchTerm}"` : 'All Commands';
+            } else {
+                sectionTitle.textContent = searchTerm 
+                    ? `${currentCategory} - Search Results for "${searchTerm}"`
+                    : `${currentCategory} Commands`;
+            }
+            
+            renderCommands(filteredCommands);
+        }
+
+        // Initialize the dashboard
+        function initDashboard() {
+            // Count unique categories
+            const categories = new Set(commandsData.map(command => extractCategory(command.title)));
+            
+            // Update stats
+            totalCommands.textContent = commandsData.length;
+            totalCategories.textContent = categories.size;
+            searchResults.textContent = commandsData.length;
+            
+            // Render category list and commands
+            renderCategoryList(commandsData);
+            renderCommands(commandsData);
+            
+            // Add search functionality
+            searchInput.addEventListener('input', filterCommands);
+            
+            // Add expand/collapse functionality
+            expandAllBtn.addEventListener('click', () => {
+                document.querySelectorAll('.command-code').forEach(code => {
+                    code.style.whiteSpace = 'pre-wrap';
+                });
+            });
+            
+            collapseAllBtn.addEventListener('click', () => {
+                document.querySelectorAll('.command-code').forEach(code => {
+                    code.style.whiteSpace = 'nowrap';
+                });
+            });
+        }
+
+        // Load commands from JSON file
+        function loadCommands() {
+            fetch('commands.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load commands.json');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    commandsData = data;
+                    initDashboard();
+                })
+                .catch(error => {
+                    console.error('Error loading commands:', error);
+                    commandsGrid.innerHTML = `
+                        <div class="no-results">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <h3>Error Loading Commands</h3>
+                            <p>Could not load commands.json file. Please check if it exists.</p>
+                        </div>
+                    `;
+                });
+        }
+
+        // Start the dashboard when the page loads
+        document.addEventListener('DOMContentLoaded', loadCommands);
+    </script>
+</body>
+</html>

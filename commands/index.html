@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cybersecurity Commands Dashboard</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+    --bg-color: #121212;
+    --sidebar-bg: #1f1f1f;
+    --card-bg: #1b1b1b;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --accent-color: #3b82f6;
+    --accent-light: rgba(59, 130, 246, 0.2);
+    --border-color: #333;
+    --low-risk: #10b981;
+    --medium-risk: #f59e0b;
+    --high-risk: #ef4444;
+    --shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+
+body { background-color: var(--bg-color); color: var(--text-primary); display: flex; min-height: 100vh; }
+
+.sidebar {
+    width: 260px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border-color);
+    padding: 24px 16px; overflow-y: auto; height: 100vh; position: fixed; left: 0; top: 0;
+}
+
+.logo { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+.logo i { color: var(--accent-color); font-size: 24px; }
+.logo h1 { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+
+.search-container { margin-bottom: 24px; }
+.search-box { position: relative; }
+.search-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); }
+.search-box input { width: 100%; padding: 10px 10px 10px 38px; border-radius: 6px; border: 1px solid var(--border-color); background-color: #2a2a2a; color: var(--text-primary); font-size: 14px; }
+
+.category-list { list-style: none; }
+.category-item a {
+    display: flex; align-items: center; padding: 10px 14px; border-radius: 6px;
+    color: var(--text-secondary); text-decoration: none; font-size: 14px; transition: all 0.2s;
+}
+.category-item a:hover, .category-item.active a {
+    background-color: var(--accent-light); color: var(--accent-color); font-weight: 500;
+}
+.category-item i { margin-right: 12px; width: 20px; text-align: center; }
+
+.main-content { flex: 1; margin-left: 260px; padding: 24px 32px; }
+
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.header h2 { font-size: 24px; font-weight: 600; color: var(--text-primary); }
+.header-actions .btn { padding: 8px 16px; border-radius: 6px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+.btn-primary { background-color: var(--accent-color); color: white; border: none; }
+.btn-secondary { background-color: #2a2a2a; color: var(--text-primary); border: 1px solid var(--border-color); }
+.btn:hover { opacity: 0.9; }
+
+.stats-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.stat-card { background-color: var(--card-bg); border-radius: 8px; padding: 20px; box-shadow: var(--shadow); }
+.stat-value { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+.stat-label { font-size: 14px; color: var(--text-secondary); }
+
+.content-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
+.command-card { background-color: var(--card-bg); border-radius: 8px; padding: 20px; box-shadow: var(--shadow); transition: transform 0.2s; }
+.command-card:hover { transform: translateY(-2px); }
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.tool-name { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: var(--text-primary); }
+.risk-badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+.risk-low { background-color: rgba(16, 185, 129,0.1); color: var(--low-risk); }
+.risk-medium { background-color: rgba(245, 158, 11,0.1); color: var(--medium-risk); }
+.risk-high { background-color: rgba(239, 68, 68,0.1); color: var(--high-risk); }
+
+.command-template, .example-usage { background-color: #2a2a2a; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 14px; margin-bottom: 12px; border-left: 3px solid var(--accent-color); color: var(--text-primary); }
+.description, .prerequisites, .defensive-context { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; }
+.defensive-context { font-style: italic; background-color: rgba(59,130,246,0.05); padding: 10px; border-radius: 6px; }
+
+.tags-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.tag { background-color: #2a2a2a; padding: 4px 8px; border-radius: 4px; font-size: 12px; color: var(--text-secondary); }
+
+.view-options { display: flex; gap: 12px; margin-bottom: 20px; }
+.view-option { padding: 8px 16px; border-radius: 6px; background-color: #2a2a2a; border: 1px solid var(--border-color); font-size: 14px; cursor: pointer; }
+.view-option.active { background-color: var(--accent-color); color: white; border-color: var(--accent-color); }
+
+@media (max-width: 1024px) { .sidebar { width: 220px; } .main-content { margin-left: 220px; } }
+@media (max-width: 768px) { .sidebar { width: 100%; height: auto; position: relative; padding: 16px; } .main-content { margin-left: 0; padding: 16px; } .content-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="sidebar">
+    <div class="logo">
+        <i class="fas fa-shield-alt"></i>
+        <h1>CyberSec Toolkit</h1>
+    </div>
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search commands...">
+        </div>
+    </div>
+    <ul class="category-list" id="categoryList"></ul>
+</div>
+
+<div class="main-content">
+    <div class="header">
+        <h2 id="pageTitle">All Commands</h2>
+        <div class="header-actions">
+            <button class="btn btn-secondary"><i class="fas fa-filter"></i> Filter</button>
+            <button class="btn btn-primary"><i class="fas fa-plus"></i> New Command</button>
+        </div>
+    </div>
+    <div class="stats-container">
+        <div class="stat-card"><div class="stat-value" id="totalCommands">0</div><div class="stat-label">Total Commands</div></div>
+        <div class="stat-card"><div class="stat-value" id="totalCategories">0</div><div class="stat-label">Categories</div></div>
+        <div class="stat-card"><div class="stat-value" id="highRiskCount">0</div><div class="stat-label">High Risk Tools</div></div>
+        <div class="stat-card"><div class="stat-value" id="lastUpdate">N/A</div><div class="stat-label">Last Updated</div></div>
+    </div>
+    <div class="view-options">
+        <div class="view-option active" data-view="all">All Commands</div>
+        <div class="view-option" data-view="recon">Reconnaissance</div>
+        <div class="view-option" data-view="scanning">Network Scanning</div>
+        <div class="view-option" data-view="web">Web Application</div>
+    </div>
+    <div class="content-grid" id="commandsGrid"></div>
+</div>
+
+<script>
+let data = null;
+
+async function initDashboard() {
+    // Load JSON from file
+    const response = await fetch('commands.json');
+    data = await response.json();
+
+    populateCategories();
+    populateStats();
+    displayAllCommands();
+
+    document.getElementById('searchInput').addEventListener('input', handleSearch);
+    document.querySelectorAll('.view-option').forEach(option => option.addEventListener('click', handleViewChange));
+}
+
+// Populate categories
+function populateCategories() {
+    const categoryList = document.getElementById('categoryList');
+    categoryList.innerHTML = '';
+    data.categories.forEach(category => {
+        const listItem = document.createElement('li');
+        listItem.className = 'category-item';
+        let icon = 'fa-search';
+        if (category.category_name.includes('Network')) icon = 'fa-network-wired';
+        if (category.category_name.includes('Web')) icon = 'fa-globe';
+        if (category.category_name.includes('Vulnerability')) icon = 'fa-bug';
+        if (category.category_name.includes('Exploitation')) icon = 'fa-bomb';
+        listItem.innerHTML = `<a href="#" data-category-id="${category.category_id}"><i class="fas ${icon}"></i>${category.category_name}</a>`;
+        listItem.addEventListener('click', e => { e.preventDefault(); displayCategoryCommands(category.category_id); setActiveCategory(listItem); });
+        categoryList.appendChild(listItem);
+    });
+}
+
+function setActiveCategory(listItem) { document.querySelectorAll('.category-item').forEach(item => item.classList.remove('active')); listItem.classList.add('active'); }
+
+function populateStats() {
+    const totalCommands = document.getElementById('totalCommands');
+    const totalCategories = document.getElementById('totalCategories');
+    const highRiskCount = document.getElementById('highRiskCount');
+    const lastUpdate = document.getElementById('lastUpdate');
+
+    let commandCount = 0, highRisk = 0;
+    data.categories.forEach(cat => { commandCount += cat.commands.length; cat.commands.forEach(cmd => { if(cmd.risk_level==='high') highRisk++; }); });
+
+    totalCommands.textContent = commandCount;
+    totalCategories.textContent = data.categories.length;
+    highRiskCount.textContent = highRisk;
+    lastUpdate.textContent = data.last_updated;
+}
+
+function displayAllCommands() {
+    const pageTitle = document.getElementById('pageTitle');
+    const commandsGrid = document.getElementById('commandsGrid');
+    pageTitle.textContent = 'All Commands';
+    commandsGrid.innerHTML = '';
+    data.categories.forEach(cat => { cat.commands.forEach(cmd => commandsGrid.appendChild(createCommandCard(cmd, cat.category_name))); });
+}
+
+function displayCategoryCommands(catId) {
+    const category = data.categories.find(c => c.category_id === catId);
+    if(!category) return;
+    document.getElementById('pageTitle').textContent = category.category_name;
+    const commandsGrid = document.getElementById('commandsGrid');
+    commandsGrid.innerHTML = '';
+    category.commands.forEach(cmd => commandsGrid.appendChild(createCommandCard(cmd, category.category_name)));
+}
+
+function createCommandCard(cmd, categoryName) {
+    const card = document.createElement('div'); card.className = 'command-card';
+    let riskClass = 'risk-low'; if(cmd.risk_level==='medium') riskClass='risk-medium'; if(cmd.risk_level==='high') riskClass='risk-high';
+    const prerequisites = cmd.prerequisites.join(', ');
+    card.innerHTML = `
+        <div class="card-header">
+            <div><div class="tool-name">${cmd.tool}</div><div style="font-size:12px;color:var(--text-secondary);">${categoryName}</div></div>
+            <div class="risk-badge ${riskClass}">${cmd.risk_level.toUpperCase()}</div>
+        </div>
+        <div class="command-template">${cmd.command_template}</div>
+        <div class="description">${cmd.description}</div>
+        <div class="example-usage">${cmd.example_usage}</div>
+        <div class="tags-container">${cmd.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+        <div class="defensive-context"><strong>Defensive Context:</strong> ${cmd.defensive_context}</div>
+        <div class="prerequisites"><strong>Prerequisites:</strong> ${prerequisites}</div>`;
+    return card;
+}
+
+function handleSearch() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const commandsGrid = document.getElementById('commandsGrid');
+    const pageTitle = document.getElementById('pageTitle');
+    if(searchTerm.trim()===''){ displayAllCommands(); return; }
+    commandsGrid.innerHTML = '';
+    pageTitle.textContent = `Search Results for "${searchTerm}"`;
+    data.categories.forEach(cat=>{ cat.commands.forEach(cmd=>{ if(cmd.tool.toLowerCase().includes(searchTerm) || cmd.description.toLowerCase().includes(searchTerm) || cmd.tags.some(tag=>tag.toLowerCase().includes(searchTerm))){ commandsGrid.appendChild(createCommandCard(cmd, cat.category_name)); } }); });
+}
+
+function handleViewChange(e){
+    const view = e.target.getAttribute('data-view');
+    document.querySelectorAll('.view-option').forEach(opt=>opt.classList.remove('active'));
+    e.target.classList.add('active');
+    if(view==='all'){ displayAllCommands(); return; }
+    const mapping = { recon: 'Reconnaissance', scanning: 'Network Scanning', web:'Web Application' };
+    const category = data.categories.find(cat=>cat.category_name.includes(mapping[view]));
+    if(category) displayCategoryCommands(category.category_id);
+}
+
+document.addEventListener('DOMContentLoaded', initDashboard);
+</script>
+</body>
+</html>
